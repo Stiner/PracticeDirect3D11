@@ -1,4 +1,4 @@
-// Practice D3D11
+﻿// Practice D3D11
 
 #include "resource.h"
 #include "WindowProcess.h"
@@ -48,7 +48,7 @@ namespace
         LoadStringW(hInstance, IDS_APP_TITLE, g_szTitle, MAX_LOADSTRING);
         LoadStringW(hInstance, IDC_PRACTICEDIRECT3D11, g_szWindowClass, MAX_LOADSTRING);
 
-        // ������ Ŭ������ ����մϴ�.
+        // 윈도우 클래스를 등록합니다.
         WNDCLASSEXW wcex;
         wcex.cbSize        = sizeof(WNDCLASSEX);
         wcex.style         = CS_HREDRAW | CS_VREDRAW;
@@ -295,6 +295,16 @@ namespace
     HRESULT InitGeometry()
     {
         HRESULT hr;
+
+        //            (0,1)           
+        //       ┌──────▲──────┐      
+        //       │      │      │      
+        //       │      │(0,0) │      
+        // (-1,0)◄──────┼──────►(1,0) 
+        //       │      │      │      
+        //       │      │      │      
+        //       └──────▼──────┘      
+        //            (0,-1)          
 
         // Create vertex buffer
         SimpleVertex vertices[] =
