@@ -141,13 +141,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
-    <ClInclude Include="MyGameApp.h" />
+    <ClInclude Include="PracticeD3D11.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="ShaderUtility.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="WindowProcess.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="MyGameApp.cpp" />
+    <ClCompile Include="PracticeD3D11.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="ShaderUtility.cpp" />
+    <ClCompile Include="WindowProcess.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="PracticeDirect3D11.rc" />
@@ -155,6 +159,11 @@
   <ItemGroup>
     <Image Include="PracticeDirect3D11.ico" />
     <Image Include="small.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="MyShader.fxh">
+      <FileType>Text</FileType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
