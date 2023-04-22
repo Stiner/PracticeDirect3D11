@@ -15,7 +15,7 @@
     </Filter>
     <Filter Include="Shaders">
       <UniqueIdentifier>{d39f4f6f-2ece-4bcb-9f29-e6533d481012}</UniqueIdentifier>
-      <Extensions>*.hlsl</Extensions>
+      <Extensions>fx;fxh;hlsl</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -69,5 +69,13 @@
     <None Include="MyShader.fxh">
       <Filter>Shaders</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="MyShader_PS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="MyShader_VS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
