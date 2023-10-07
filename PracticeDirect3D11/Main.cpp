@@ -7,5 +7,5 @@ int APIENTRY wWinMain(_In_     HINSTANCE hInstance,
                       _In_     LPWSTR    lpCmdLine,
                       _In_     int       nCmdShow)
 {
-    return RunApp(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
+    return MyApp().Run(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
 }

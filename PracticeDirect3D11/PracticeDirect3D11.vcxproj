@@ -163,6 +163,7 @@
     <Image Include="small.ico" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\README.md" />
     <None Include="MyShader.fxh">
       <FileType>Document</FileType>
     </None>

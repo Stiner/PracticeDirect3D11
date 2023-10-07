@@ -13,7 +13,11 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Shaders">
+    <Filter Include="문서">
+      <UniqueIdentifier>{4d09a231-7620-4dbf-b4e3-d0e058fa6567}</UniqueIdentifier>
+      <Extensions>*.md</Extensions>
+    </Filter>
+    <Filter Include="쉐이더">
       <UniqueIdentifier>{d39f4f6f-2ece-4bcb-9f29-e6533d481012}</UniqueIdentifier>
       <Extensions>fx;fxh;hlsl</Extensions>
     </Filter>
@@ -67,15 +71,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="MyShader.fxh">
-      <Filter>Shaders</Filter>
+      <Filter>쉐이더</Filter>
     </None>
+    <None Include="..\README.md" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="MyShader_PS.hlsl">
-      <Filter>Shaders</Filter>
+      <Filter>쉐이더</Filter>
     </FxCompile>
     <FxCompile Include="MyShader_VS.hlsl">
-      <Filter>Shaders</Filter>
+      <Filter>쉐이더</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>
