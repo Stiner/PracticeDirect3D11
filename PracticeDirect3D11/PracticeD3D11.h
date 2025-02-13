@@ -30,24 +30,29 @@ protected:
     void CleanupApp();
 
 protected:
-    WCHAR _szTitle[Const::MAX_LOADSTRING];
-    WCHAR _szWindowClass[Const::MAX_LOADSTRING];
+    WCHAR _szTitle[Const::MAX_LOADSTRING] = {};
+    WCHAR _szWindowClass[Const::MAX_LOADSTRING] = {};
 
-    HINSTANCE _hInstance;
-    HWND      _hWnd;
+    HINSTANCE _hInstance = nullptr;
+    HWND      _hWnd = nullptr;
 
-    D3D_DRIVER_TYPE         _driverType         = D3D_DRIVER_TYPE_NULL;
-    D3D_FEATURE_LEVEL       _featureLevel       = D3D_FEATURE_LEVEL_11_0;
-    ID3D11Device*           _pd3dDevice         = nullptr;
-    ID3D11Device1*          _pd3dDevice1        = nullptr;
-    ID3D11DeviceContext*    _pImmediateContext  = nullptr;
-    ID3D11DeviceContext1*   _pImmediateContext1 = nullptr;
-    IDXGISwapChain*         _pSwapChain         = nullptr;
-    IDXGISwapChain1*        _pSwapChain1        = nullptr;
-    ID3D11RenderTargetView* _pRenderTargetView  = nullptr;
+    D3D_DRIVER_TYPE         _DriverType            = D3D_DRIVER_TYPE_NULL;
+    D3D_FEATURE_LEVEL       _FeatureLevel          = D3D_FEATURE_LEVEL_11_0;
 
-    ID3D11VertexShader*     _pVertexShader      = nullptr;
-    ID3D11PixelShader*      _pPixelShader       = nullptr;
-    ID3D11InputLayout*      _pVertexLayout      = nullptr;
-    ID3D11Buffer*           _pVertexBuffer      = nullptr;
+    ID3D11Device*           _pD3DDevice            = nullptr;
+    ID3D11Device1*          _pD3DDevice1           = nullptr;
+
+    ID3D11DeviceContext*    _pD3DImmediateContext  = nullptr;
+    ID3D11DeviceContext1*   _pD3DImmediateContext1 = nullptr;
+
+    IDXGISwapChain*         _pDXGISwapChain        = nullptr;
+    IDXGISwapChain1*        _pDXGISwapChain1       = nullptr;
+
+    ID3D11RenderTargetView* _pD3DRenderTargetView  = nullptr;
+    ID3D11DepthStencilView* _pD3DDepthStencilView  = nullptr;
+
+    ID3D11VertexShader*     _pD3DVertexShader      = nullptr;
+    ID3D11PixelShader*      _pD3DPixelShader       = nullptr;
+    ID3D11InputLayout*      _pD3DVertexLayout      = nullptr;
+    ID3D11Buffer*           _pD3DVertexBuffer      = nullptr;
 };

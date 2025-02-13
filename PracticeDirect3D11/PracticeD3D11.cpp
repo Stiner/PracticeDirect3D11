@@ -2,7 +2,7 @@
 
 #include "resource.h"
 #include "WindowProcess.h"
-#include "ShaderUtility.h"
+#include "MyUtility.h"
 #include "PracticeD3D11.h"
 
 struct SimpleVertex
@@ -12,6 +12,10 @@ struct SimpleVertex
 
 int MyApp::Run(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
+#if defined(DEBUG) | defined(_DEBUG)
+    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+#endif
+
     if (FAILED(InitWithCmd(lpCmdLine)))
         return E_FAIL;
 
@@ -131,118 +135,126 @@ HRESULT MyApp::InitDevice()
     {
         D3D_FEATURE_LEVEL_11_1,
         D3D_FEATURE_LEVEL_11_0,
-        D3D_FEATURE_LEVEL_10_1,
-        D3D_FEATURE_LEVEL_10_0,
     };
     UINT numFeatureLevels = ARRAYSIZE(featureLevels);
 
     for (UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++)
     {
-        _driverType = driverTypes[driverTypeIndex];
-        hr = D3D11CreateDevice(nullptr, _driverType, nullptr, createDeviceFlags, featureLevels, numFeatureLevels,
-            D3D11_SDK_VERSION, &_pd3dDevice, &_featureLevel, &_pImmediateContext);
+        _DriverType = driverTypes[driverTypeIndex];
 
+        hr = D3D11CreateDevice(nullptr, _DriverType, nullptr, createDeviceFlags, featureLevels, numFeatureLevels, D3D11_SDK_VERSION, &_pD3DDevice, &_FeatureLevel, &_pD3DImmediateContext);
         if (hr == E_INVALIDARG)
         {
             // DirectX 11.0 platforms will not recognize D3D_FEATURE_LEVEL_11_1 so we need to retry without it
-            hr = D3D11CreateDevice(nullptr, _driverType, nullptr, createDeviceFlags, &featureLevels[1], numFeatureLevels - 1,
-                D3D11_SDK_VERSION, &_pd3dDevice, &_featureLevel, &_pImmediateContext);
+            hr = D3D11CreateDevice(nullptr, _DriverType, nullptr, createDeviceFlags, &featureLevels[1], numFeatureLevels - 1, D3D11_SDK_VERSION, &_pD3DDevice, &_FeatureLevel, &_pD3DImmediateContext);
         }
 
         if (SUCCEEDED(hr))
             break;
     }
-    if (FAILED(hr))
-        return hr;
+
+    if (FAILED(hr)) return hr;
+
+    // DirectX 11.1 or later
+    if (_FeatureLevel == D3D_FEATURE_LEVEL_11_1)
+    {
+        hr = _pD3DDevice->QueryInterface(__uuidof(ID3D11Device1), reinterpret_cast<void**>(&_pD3DDevice1));
+        hr = _pD3DImmediateContext->QueryInterface(__uuidof(ID3D11DeviceContext1), reinterpret_cast<void**>(&_pD3DImmediateContext1));
+    }
 
     // Obtain DXGI factory from device (since we used nullptr for pAdapter above)
-    IDXGIFactory1* dxgiFactory = nullptr;
+    IDXGIFactory1* pDXGIFactory1 = nullptr;
+    // dxgi.lib 링크 안하고 생성시.
     {
-        IDXGIDevice* dxgiDevice = nullptr;
-        hr = _pd3dDevice->QueryInterface(__uuidof(IDXGIDevice), reinterpret_cast<void**>(&dxgiDevice));
-        if (SUCCEEDED(hr))
-        {
-            IDXGIAdapter* adapter = nullptr;
-            hr = dxgiDevice->GetAdapter(&adapter);
-            if (SUCCEEDED(hr))
-            {
-                hr = adapter->GetParent(__uuidof(IDXGIFactory1), reinterpret_cast<void**>(&dxgiFactory));
-                adapter->Release();
-            }
-            dxgiDevice->Release();
-        }
+        IDXGIDevice* pDXGIDevice = nullptr;
+        hr = _pD3DDevice->QueryInterface(__uuidof(IDXGIDevice), reinterpret_cast<void**>(&pDXGIDevice));
+        if (FAILED(hr)) return hr;
+
+        IDXGIAdapter* pDXGIAdapter = nullptr;
+        hr = pDXGIDevice->GetAdapter(&pDXGIAdapter);
+        COM_RELEASE(pDXGIDevice);
+        if (FAILED(hr)) return hr;
+
+        hr = pDXGIAdapter->GetParent(__uuidof(IDXGIFactory1), reinterpret_cast<void**>(&pDXGIFactory1));
+        COM_RELEASE(pDXGIAdapter);
+        if (FAILED(hr)) return hr;
     }
-    if (FAILED(hr))
-        return hr;
+    // dxgi.lib 사용한다면 이 방식으로.
+    {
+        //hr = CreateDXGIFactory1(__uuidof(IDXGIFactory), reinterpret_cast<void**>(&pDXGIFactory1));
+        //SAFE_RELEASE(pDXGIFactory);
+        //if (FAILED(hr)) return hr;
+    }
 
     // Create swap chain
-    IDXGIFactory2* dxgiFactory2 = nullptr;
-    hr = dxgiFactory->QueryInterface(__uuidof(IDXGIFactory2), reinterpret_cast<void**>(&dxgiFactory2));
-    if (dxgiFactory2)
     {
-        // DirectX 11.1 or later
-        hr = _pd3dDevice->QueryInterface(__uuidof(ID3D11Device1), reinterpret_cast<void**>(&_pd3dDevice1));
+        IDXGIFactory2* pDXGIFactory2 = nullptr;
+        hr = pDXGIFactory1->QueryInterface(__uuidof(IDXGIFactory2), reinterpret_cast<void**>(&pDXGIFactory2));
         if (SUCCEEDED(hr))
         {
-            (void)_pImmediateContext->QueryInterface(__uuidof(ID3D11DeviceContext1), reinterpret_cast<void**>(&_pImmediateContext1));
+            DXGI_SWAP_CHAIN_DESC1 sd = {};
+            sd.Width              = width;
+            sd.Height             = height;
+            sd.Format             = DXGI_FORMAT_R8G8B8A8_UNORM;
+            sd.SampleDesc.Count   = 1;
+            sd.SampleDesc.Quality = 0;
+            sd.BufferUsage        = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+            sd.BufferCount        = 1;
+
+            // DirectX 11.1 or later
+            hr = pDXGIFactory2->CreateSwapChainForHwnd(_pD3DDevice, _hWnd, &sd, nullptr, nullptr, &_pDXGISwapChain1);
+            if (SUCCEEDED(hr))
+            {
+                hr = _pDXGISwapChain1->QueryInterface(__uuidof(IDXGISwapChain), reinterpret_cast<void**>(&_pDXGISwapChain));
+                if (SUCCEEDED(hr))
+                {
+                    hr = pDXGIFactory2->MakeWindowAssociation(_hWnd, DXGI_MWA_NO_ALT_ENTER);
+                }
+            }
         }
-
-        DXGI_SWAP_CHAIN_DESC1 sd = {};
-        sd.Width              = width;
-        sd.Height             = height;
-        sd.Format             = DXGI_FORMAT_R8G8B8A8_UNORM;
-        sd.SampleDesc.Count   = 1;
-        sd.SampleDesc.Quality = 0;
-        sd.BufferUsage        = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-        sd.BufferCount        = 1;
-
-        hr = dxgiFactory2->CreateSwapChainForHwnd(_pd3dDevice, _hWnd, &sd, nullptr, nullptr, &_pSwapChain1);
-        if (SUCCEEDED(hr))
+        else
         {
-            hr = _pSwapChain1->QueryInterface(__uuidof(IDXGISwapChain), reinterpret_cast<void**>(&_pSwapChain));
+            // DirectX 11.0 systems
+            DXGI_SWAP_CHAIN_DESC sd = {};
+            sd.BufferCount                        = 1;
+            sd.BufferDesc.Width                   = width;
+            sd.BufferDesc.Height                  = height;
+            sd.BufferDesc.Format                  = DXGI_FORMAT_R8G8B8A8_UNORM;
+            sd.BufferDesc.RefreshRate.Numerator   = 60;
+            sd.BufferDesc.RefreshRate.Denominator = 1;
+            sd.BufferUsage                        = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+            sd.OutputWindow                       = _hWnd;
+            sd.SampleDesc.Count                   = 1;
+            sd.SampleDesc.Quality                 = 0;
+            sd.Windowed                           = TRUE;
+
+            hr = pDXGIFactory1->CreateSwapChain(_pD3DDevice, &sd, &_pDXGISwapChain);
+            if (SUCCEEDED(hr))
+            {
+                // Note this tutorial doesn't handle full-screen swapchains so we block the ALT+ENTER shortcut
+                hr = pDXGIFactory1->MakeWindowAssociation(_hWnd, DXGI_MWA_NO_ALT_ENTER);
+            }
         }
 
-        dxgiFactory2->Release();
-    }
-    else
-    {
-        // DirectX 11.0 systems
-        DXGI_SWAP_CHAIN_DESC sd = {};
-        sd.BufferCount                        = 1;
-        sd.BufferDesc.Width                   = width;
-        sd.BufferDesc.Height                  = height;
-        sd.BufferDesc.Format                  = DXGI_FORMAT_R8G8B8A8_UNORM;
-        sd.BufferDesc.RefreshRate.Numerator   = 60;
-        sd.BufferDesc.RefreshRate.Denominator = 1;
-        sd.BufferUsage                        = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-        sd.OutputWindow                       = _hWnd;
-        sd.SampleDesc.Count                   = 1;
-        sd.SampleDesc.Quality                 = 0;
-        sd.Windowed                           = TRUE;
-
-        hr = dxgiFactory->CreateSwapChain(_pd3dDevice, &sd, &_pSwapChain);
+        COM_RELEASE(pDXGIFactory2);
     }
 
-    // Note this tutorial doesn't handle full-screen swapchains so we block the ALT+ENTER shortcut
-    dxgiFactory->MakeWindowAssociation(_hWnd, DXGI_MWA_NO_ALT_ENTER);
+    COM_RELEASE(pDXGIFactory1);
 
-    dxgiFactory->Release();
-
-    if (FAILED(hr))
-        return hr;
+    if (FAILED(hr)) return hr;
 
     // Create a render target view
-    ID3D11Texture2D* pBackBuffer = nullptr;
-    hr = _pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&pBackBuffer));
-    if (FAILED(hr))
-        return hr;
+    {
+        ID3D11Texture2D* pBackBuffer = nullptr;
+        hr = _pDXGISwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&pBackBuffer));
+        if (FAILED(hr)) return hr;
 
-    hr = _pd3dDevice->CreateRenderTargetView(pBackBuffer, nullptr, &_pRenderTargetView);
-    pBackBuffer->Release();
-    if (FAILED(hr))
-        return hr;
+        hr = _pD3DDevice->CreateRenderTargetView(pBackBuffer, nullptr, &_pD3DRenderTargetView);
+        COM_RELEASE(pBackBuffer);
+        if (FAILED(hr)) return hr;
+    }
 
-    _pImmediateContext->OMSetRenderTargets(1, &_pRenderTargetView, nullptr);
+    _pD3DImmediateContext->OMSetRenderTargets(1, &_pD3DRenderTargetView, nullptr);
 
     // Setup the viewport
     D3D11_VIEWPORT vp;
@@ -252,7 +264,7 @@ HRESULT MyApp::InitDevice()
     vp.MaxDepth = 1.0f;
     vp.TopLeftX = 0;
     vp.TopLeftY = 0;
-    _pImmediateContext->RSSetViewports(1, &vp);
+    _pD3DImmediateContext->RSSetViewports(1, &vp);
 
     return hr;
 }
@@ -261,53 +273,69 @@ HRESULT MyApp::InitShader()
 {
     HRESULT hr;
 
-    // Compile the vertex shader
-    ID3DBlob* pVSBlob = nullptr;
-    hr = CompileShaderFromFile(TEXT("MyShader.fxh"), "VS", "vs_4_0", &pVSBlob);
-    if (FAILED(hr))
+    // Vertex Shader
     {
-        MessageBox(nullptr, TEXT("The FX file cannot be compiled. Please run this executable from the directory that contains the FX file."), TEXT("Error"), MB_OK);
-        return hr;
+        ID3DBlob* pVertexShaderBlob = nullptr;
+        {
+            // Try load compiled vertex shader file
+            if (FAILED(MyUtility::ReadFileToBlob(TEXT("MyShader_VS.cso"), &pVertexShaderBlob)))
+            {
+                // Compile the vertex shader
+                hr = MyUtility::CompileShaderFromFile(TEXT("MyShader_VS.hlsl"), "VS", "vs_4_0", &pVertexShaderBlob);
+                if (FAILED(hr))
+                {
+                    MessageBox(nullptr, TEXT("The FX file cannot be compiled. Please run this executable from the directory that contains the FX file."), TEXT("Error"), MB_OK);
+                    return hr;
+                }
+            }
+
+            // Create the vertex shader
+            hr = _pD3DDevice->CreateVertexShader(pVertexShaderBlob->GetBufferPointer(), pVertexShaderBlob->GetBufferSize(), nullptr, &_pD3DVertexShader);
+            if (FAILED(hr))
+            {
+                COM_RELEASE(pVertexShaderBlob);
+                return hr;
+            }
+
+            // Define the input layout
+            D3D11_INPUT_ELEMENT_DESC layout[] =
+            {
+                { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+            };
+            UINT numElements = ARRAYSIZE(layout);
+
+            // Create the input layout
+            hr = _pD3DDevice->CreateInputLayout(layout, numElements, pVertexShaderBlob->GetBufferPointer(), pVertexShaderBlob->GetBufferSize(), &_pD3DVertexLayout);
+        }
+        COM_RELEASE(pVertexShaderBlob);
+        if (FAILED(hr)) return hr;
     }
-
-    // Create the vertex shader
-    hr = _pd3dDevice->CreateVertexShader(pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), nullptr, &_pVertexShader);
-    if (FAILED(hr))
-    {
-        pVSBlob->Release();
-        return hr;
-    }
-
-    // Define the input layout
-    D3D11_INPUT_ELEMENT_DESC layout[] =
-    {
-        { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-    };
-    UINT numElements = ARRAYSIZE(layout);
-
-    // Create the input layout
-    hr = _pd3dDevice->CreateInputLayout(layout, numElements, pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), &_pVertexLayout);
-    pVSBlob->Release();
-    if (FAILED(hr))
-        return hr;
 
     // Set the input layout
-    _pImmediateContext->IASetInputLayout(_pVertexLayout);
+    _pD3DImmediateContext->IASetInputLayout(_pD3DVertexLayout);
 
-    // Compile the pixel shader
-    ID3DBlob* pPSBlob = nullptr;
-    hr = CompileShaderFromFile(TEXT("MyShader.fxh"), "PS", "ps_4_0", &pPSBlob);
-    if (FAILED(hr))
+    // Pixel Shader
     {
-        MessageBox(nullptr, TEXT("The FX file cannot be compiled. Please run this executable from the directory that contains the FX file."), TEXT("Error"), MB_OK);
-        return hr;
-    }
+        ID3DBlob* pPixelShaderBlob = nullptr;
+        {
+            // Try load compiled pixel shader file
+            if (FAILED(MyUtility::ReadFileToBlob(TEXT("MyShader_PS.cso"), &pPixelShaderBlob)))
+            {
+                // Compile the pixel shader
+                hr = MyUtility::CompileShaderFromFile(TEXT("MyShader_PS.hlsl"), "PS", "ps_4_0", &pPixelShaderBlob);
+                if (FAILED(hr))
+                {
+                    MessageBox(nullptr, TEXT("The FX file cannot be compiled. Please run this executable from the directory that contains the FX file."), TEXT("Error"), MB_OK);
+                    return hr;
+                }
+            }
 
-    // Create the pixel shader
-    hr = _pd3dDevice->CreatePixelShader(pPSBlob->GetBufferPointer(), pPSBlob->GetBufferSize(), nullptr, &_pPixelShader);
-    pPSBlob->Release();
-    if (FAILED(hr))
-        return hr;
+            // Create the pixel shader
+            hr = _pD3DDevice->CreatePixelShader(pPixelShaderBlob->GetBufferPointer(), pPixelShaderBlob->GetBufferSize(), nullptr, &_pD3DPixelShader);
+        }
+        COM_RELEASE(pPixelShaderBlob);
+        if (FAILED(hr)) return hr;
+    }
 
     return hr;
 }
@@ -334,25 +362,24 @@ HRESULT MyApp::InitGeometry()
         DirectX::XMFLOAT3( -0.5f, -0.5f,  0.0f),
     };
 
-    D3D11_BUFFER_DESC bd = {};
-    bd.Usage          = D3D11_USAGE_DEFAULT;
-    bd.ByteWidth      = sizeof(SimpleVertex) * 3;
-    bd.BindFlags      = D3D11_BIND_VERTEX_BUFFER;
-    bd.CPUAccessFlags = 0;
+    D3D11_BUFFER_DESC descBufferForVertex = {};
+    descBufferForVertex.Usage          = D3D11_USAGE_DEFAULT;
+    descBufferForVertex.ByteWidth      = sizeof(SimpleVertex) * 3;
+    descBufferForVertex.BindFlags      = D3D11_BIND_VERTEX_BUFFER;
+    descBufferForVertex.CPUAccessFlags = 0;
 
-    D3D11_SUBRESOURCE_DATA InitData = {};
-    InitData.pSysMem = vertices;
-    hr = _pd3dDevice->CreateBuffer(&bd, &InitData, &_pVertexBuffer);
-    if (FAILED(hr))
-        return hr;
+    D3D11_SUBRESOURCE_DATA initDataForVertexBuffer = {};
+    initDataForVertexBuffer.pSysMem = vertices;
+    hr = _pD3DDevice->CreateBuffer(&descBufferForVertex, &initDataForVertexBuffer, &_pD3DVertexBuffer);
+    if (FAILED(hr)) return hr;
 
     // Set vertex buffer
     UINT stride = sizeof(SimpleVertex);
     UINT offset = 0;
-    _pImmediateContext->IASetVertexBuffers(0, 1, &_pVertexBuffer, &stride, &offset);
+    _pD3DImmediateContext->IASetVertexBuffers(0, 1, &_pD3DVertexBuffer, &stride, &offset);
 
     // Set primitive topology
-    _pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    _pD3DImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
     return S_OK;
 }
@@ -367,32 +394,32 @@ void MyApp::UpdateProcess()
 
 void MyApp::RenderProcess()
 {
-    _pImmediateContext->ClearRenderTargetView(_pRenderTargetView, DirectX::Colors::MidnightBlue);
+    _pD3DImmediateContext->ClearRenderTargetView(_pD3DRenderTargetView, DirectX::Colors::MidnightBlue);
 
     // Render a triangle
-    _pImmediateContext->VSSetShader(_pVertexShader, nullptr, 0);
-    _pImmediateContext->PSSetShader(_pPixelShader,  nullptr, 0);
-    _pImmediateContext->Draw(3, 0);
+    _pD3DImmediateContext->VSSetShader(_pD3DVertexShader, nullptr, 0);
+    _pD3DImmediateContext->PSSetShader(_pD3DPixelShader,  nullptr, 0);
+    _pD3DImmediateContext->Draw(3, 0);
 
     // Present the information rendered to the back buffer to the front buffer (the screen)
-    _pSwapChain->Present(0, 0);
+    _pDXGISwapChain->Present(0, 0);
 }
 
 void MyApp::CleanupApp()
 {
-    if (_pImmediateContext)  _pImmediateContext->ClearState();
+    if (_pD3DImmediateContext)  _pD3DImmediateContext->ClearState();
 
-    if (_pVertexBuffer)      _pVertexBuffer->Release();
-    if (_pVertexLayout)      _pVertexLayout->Release();
-    if (_pVertexShader)      _pVertexShader->Release();
-    if (_pPixelShader)       _pPixelShader->Release();
-    if (_pRenderTargetView)  _pRenderTargetView->Release();
-    if (_pSwapChain1)        _pSwapChain1->Release();
-    if (_pSwapChain)         _pSwapChain->Release();
-    if (_pImmediateContext1) _pImmediateContext1->Release();
-    if (_pImmediateContext)  _pImmediateContext->Release();
-    if (_pd3dDevice1)        _pd3dDevice1->Release();
-    if (_pd3dDevice)         _pd3dDevice->Release();
+    if (_pD3DVertexBuffer)      _pD3DVertexBuffer->Release();
+    if (_pD3DVertexLayout)      _pD3DVertexLayout->Release();
+    if (_pD3DVertexShader)      _pD3DVertexShader->Release();
+    if (_pD3DPixelShader)       _pD3DPixelShader->Release();
+    if (_pD3DRenderTargetView)  _pD3DRenderTargetView->Release();
+    if (_pDXGISwapChain1)       _pDXGISwapChain1->Release();
+    if (_pDXGISwapChain)        _pDXGISwapChain->Release();
+    if (_pD3DImmediateContext1) _pD3DImmediateContext1->Release();
+    if (_pD3DImmediateContext)  _pD3DImmediateContext->Release();
+    if (_pD3DDevice1)           _pD3DDevice1->Release();
+    if (_pD3DDevice)            _pD3DDevice->Release();
 
     _hInstance = NULL;
     _hWnd      = NULL;

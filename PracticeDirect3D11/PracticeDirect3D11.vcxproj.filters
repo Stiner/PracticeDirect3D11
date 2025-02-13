@@ -38,7 +38,7 @@
     <ClInclude Include="WindowProcess.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="ShaderUtility.h">
+    <ClInclude Include="MyUtility.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -52,7 +52,7 @@
     <ClCompile Include="WindowProcess.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="ShaderUtility.cpp">
+    <ClCompile Include="MyUtility.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -70,9 +70,6 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <None Include="MyShader.fxh">
-      <Filter>쉐이더</Filter>
-    </None>
     <None Include="..\README.md" />
   </ItemGroup>
   <ItemGroup>

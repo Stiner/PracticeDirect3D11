@@ -66,6 +66,10 @@
     <FxCompile>
       <ShaderModel>5.0</ShaderModel>
     </FxCompile>
+    <PostBuildEvent>
+      <Command>xcopy /y $(ProjectDir)*.fxh $(TargetDir)
+xcopy /y $(ProjectDir)*.hlsl $(TargetDir)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -86,19 +90,23 @@
     <FxCompile>
       <ShaderModel>5.0</ShaderModel>
     </FxCompile>
+    <PostBuildEvent>
+      <Command>xcopy /y $(ProjectDir)*.fxh $(TargetDir)
+xcopy /y $(ProjectDir)*.hlsl $(TargetDir)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
     <ClInclude Include="PracticeD3D11.h" />
     <ClInclude Include="Resource.h" />
-    <ClInclude Include="ShaderUtility.h" />
+    <ClInclude Include="MyUtility.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="WindowProcess.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PracticeD3D11.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="ShaderUtility.cpp" />
+    <ClCompile Include="MyUtility.cpp" />
     <ClCompile Include="WindowProcess.cpp" />
   </ItemGroup>
   <ItemGroup>
