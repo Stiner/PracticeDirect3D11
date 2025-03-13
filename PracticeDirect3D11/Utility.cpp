@@ -1,14 +1,17 @@
-#include "MyUtility.h"
+﻿// Practice D3D11
+
+#include "PCH.h"
+#include "Utility.h"
 #include <d3dcompiler.h>
 
 #pragma comment(lib, "d3dcompiler.lib")
 
-HRESULT MyUtility::ReadFileToBlob(const WCHAR* szFileName, ID3DBlob** ppBlobOut)
+HRESULT CUtility::ReadFileToBlob(const WCHAR* szFileName, ID3DBlob** ppBlobOut)
 {
     return D3DReadFileToBlob(szFileName, ppBlobOut);
 }
 
-HRESULT MyUtility::CompileShaderFromFile(const WCHAR* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut)
+HRESULT CUtility::CompileShaderFromFile(const WCHAR* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3DBlob** ppBlobOut)
 {
     HRESULT hr = S_OK;
 

@@ -1,8 +1,8 @@
+﻿// Practice D3D11
+
 #pragma once
 
-#include "framework.h"
-
-class MyUtility
+class CUtility
 {
 public:
     static HRESULT ReadFileToBlob(const WCHAR* szFileName, ID3DBlob** ppBlobOut);
