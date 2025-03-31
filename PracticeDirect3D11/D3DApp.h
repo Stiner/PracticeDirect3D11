@@ -75,4 +75,6 @@ protected:
     int32 _ClientHeight = 0;
 
     bool _Enable4xMSAA = false;
+
+    float _ClearColor[4] = { 0.098039225f, 0.098039225f, 0.439215720f, 1.f };
 };

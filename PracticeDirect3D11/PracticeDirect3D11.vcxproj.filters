@@ -44,6 +44,9 @@
     <ClInclude Include="PracticeD3D11.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="GeometryObject.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Utility.cpp">
@@ -59,6 +62,9 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="PracticeD3D11.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GeometryObject.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

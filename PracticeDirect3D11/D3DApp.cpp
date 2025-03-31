@@ -194,8 +194,7 @@ void CD3D11App::Draw()
     assert(_D3DImmediateDevContext);
     assert(_DXGISwapChain);
 
-    float clearColor[4] { 0.098039225f, 0.098039225f, 0.439215720f, 1.f };
-    _D3DImmediateDevContext->ClearRenderTargetView(_D3DRenderTargetView, clearColor);
+    _D3DImmediateDevContext->ClearRenderTargetView(_D3DRenderTargetView, _ClearColor);
     _D3DImmediateDevContext->ClearDepthStencilView(_D3DDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
     DrawScene();
@@ -498,6 +497,7 @@ bool CD3D11App::InitDirect3D()
                     hr = _DXGISwapChain1->QueryInterface(__uuidof(IDXGISwapChain), reinterpret_cast<void**>(&_DXGISwapChain));
                     if (SUCCEEDED(hr))
                     {
+                        // Note this tutorial doesn't handle full-screen swapchains so we block the ALT+ENTER shortcut
                         hr = pDXGIFactory2->MakeWindowAssociation(_hMainWindow, DXGI_MWA_NO_ALT_ENTER);
                     }
                 }

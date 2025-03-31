@@ -4,6 +4,8 @@
 
 #include "D3DApp.h"
 
+class ListGeometry;
+
 class CPracticeD3D11 : public CD3D11App
 {
 public:
@@ -21,5 +23,7 @@ public:
     virtual void OnMouseDown(WPARAM btnState, int x, int y) override;
     virtual void OnMouseUp(WPARAM btnState, int x, int y) override;
     virtual void OnMouseMove(WPARAM btnState, int x, int y) override;
-};
 
+protected:
+    std::unique_ptr<ListGeometry> _listGeometry;
+};
