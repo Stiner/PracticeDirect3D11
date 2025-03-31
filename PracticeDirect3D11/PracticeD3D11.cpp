@@ -1,8 +1,12 @@
-﻿#include "PCH.h"
-#include "PracticeD3D11.h"
-#include "GeometryObject.h"
+// PracticeD3D11
+
+#include "PCH.h"
 #include <DirectXMath.h>
 #include <vector>
+#include "PracticeD3D11.h"
+#include "GeometryObject.h"
+#include "GeometryObjectFactory.h"
+#include "CameraObject.h"
 
 int APIENTRY wWinMain(_In_     HINSTANCE hInstance,
     _In_opt_ HINSTANCE hPrevInstance,
@@ -11,29 +15,6 @@ int APIENTRY wWinMain(_In_     HINSTANCE hInstance,
 {
     return CPracticeD3D11(hInstance, TEXT("PracticeD3D11")).Run(lpCmdLine);
 }
-
-class ListGeometry
-{
-public:
-    ListGeometry()
-    {
-    }
-
-    ~ListGeometry()
-    {
-    }
-
-    void Add(GeometryObject* GeometryObject)
-    {
-    }
-
-    void Update()
-    {
-    }
-
-protected:
-    std::vector<std::unique_ptr<GeometryObject>> _list;
-};
 
 CPracticeD3D11::CPracticeD3D11(HINSTANCE hAppInstance, const TCHAR* szAppName)
     : CD3D11App(hAppInstance, szAppName)
@@ -53,16 +34,25 @@ bool CPracticeD3D11::ProccessCmdLine(const TCHAR* szCmdLine)
 
 bool CPracticeD3D11::Initialize()
 {
-    _listGeometry.reset(new ListGeometry());
+    bool r = __super::Initialize();
 
-    return __super::Initialize();
+    _factoryGeometry.reset(new GeometryObjectFactory());
+    _factoryGeometry->Create(_D3DDevice);
+
+    _camera.reset(new CameraObject());
+    _camera->SetFov(90.0f);
+    _camera->SetAspectRatio(GetAspectRatio());
+    _camera->SetNear(0.1f);
+    _camera->SetFar(1000.0f);
+
+    return r;
 }
 
 void CPracticeD3D11::Release()
 {
     __super::Release();
 
-    _listGeometry.release();
+    _factoryGeometry.release();
 }
 
 bool CPracticeD3D11::OnResize()
@@ -72,16 +62,11 @@ bool CPracticeD3D11::OnResize()
 
 void CPracticeD3D11::UpdateScene(float dt)
 {
-    _listGeometry->Update();
-
-    using namespace DirectX;
-
-    XMVECTOR vecEyePos = { 0, 0, -10, 0 };
-    XMVECTOR vecLookAt = { 0, 0, 0, 0 };
-    XMVECTOR vecEyeUp = { 0, 1, 0, 0 };
-    XMMATRIX matView = XMMatrixLookAtLH(vecEyePos, vecLookAt, vecEyeUp);
-
-    XMMATRIX matProjection = XMMatrixPerspectiveFovLH(90.f, GetAspectRatio(), 1.f, 10.f);
+    const auto geometryObjects = _factoryGeometry->GetContainer();
+    for (auto& geometry : geometryObjects)
+    {
+        geometry->Update();
+    }
 }
 
 void CPracticeD3D11::DrawScene()

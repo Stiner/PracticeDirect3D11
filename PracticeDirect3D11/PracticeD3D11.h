@@ -1,10 +1,11 @@
-﻿// Practice Direct3D11
+// PracticeD3D11
 
 #pragma once
 
 #include "D3DApp.h"
 
-class ListGeometry;
+class GeometryObjectFactory;
+class CameraObject;
 
 class CPracticeD3D11 : public CD3D11App
 {
@@ -25,5 +26,6 @@ public:
     virtual void OnMouseMove(WPARAM btnState, int x, int y) override;
 
 protected:
-    std::unique_ptr<ListGeometry> _listGeometry;
+    std::unique_ptr<GeometryObjectFactory> _factoryGeometry;
+    std::unique_ptr<CameraObject> _camera;
 };

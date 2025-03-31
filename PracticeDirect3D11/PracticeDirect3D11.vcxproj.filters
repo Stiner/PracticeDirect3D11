@@ -47,6 +47,12 @@
     <ClInclude Include="GeometryObject.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="GeometryObjectFactory.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraObject.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Utility.cpp">
@@ -65,6 +71,12 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="GeometryObject.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GeometryObjectFactory.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraObject.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

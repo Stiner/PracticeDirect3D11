@@ -1,4 +1,6 @@
-﻿#include "PCH.h"
+// PracticeD3D11
+
+#include "PCH.h"
 #include "GeometryObject.h"
 
 using namespace DirectX;
@@ -7,11 +9,7 @@ GeometryObject::GeometryObject()
     : _Position({ 0, 0, 0, 0 })
     , _Rotation({ 0, 0, 0, 0 })
     , _Scale({ 0, 0, 0, 0 })
-{
-    _matWorld = XMMatrixIdentity();
-}
-
-GeometryObject::~GeometryObject() noexcept
+    , _matWorld(XMMatrixIdentity())
 {
 }
 
@@ -45,6 +43,10 @@ void GeometryObject::Update()
     XMMATRIX matScale     = XMMatrixScalingFromVector(_Scale);
 
     _matWorld = matScale * matRotation * matTranslate;
+}
+
+void GeometryObject::Release()
+{
 }
 
 void GeometryObject::SetPosition(float x, float y, float z) noexcept

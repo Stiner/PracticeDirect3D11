@@ -1,4 +1,4 @@
-﻿// Practice D3D11
+﻿// PracticeD3D11
 
 #pragma once
 
@@ -23,7 +23,6 @@
 #if defined(DEBUG) | defined(_DEBUG)
 #include <crtdbg.h>
 #endif
-
 
 #define MEM_DELETE(_x) { if(_x != nullptr) { delete _x; _x = nullptr; } }
 #define COM_RELEASE(_x) { if (static_cast<IUnknown*>(_x) != nullptr) { _x->Release(); _x = nullptr; } }

@@ -100,9 +100,10 @@ xcopy /y $(ProjectDir)*.hlsl $(TargetDir)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CameraObject.h" />
     <ClInclude Include="D3DApp.h" />
     <ClInclude Include="GeometryObject.h" />
-    <ClInclude Include="MyString.h" />
+    <ClInclude Include="GeometryObjectFactory.h" />
     <ClInclude Include="PCH.h" />
     <ClInclude Include="GameTimer.h" />
     <ClInclude Include="PracticeD3D11.h" />
@@ -111,9 +112,10 @@ xcopy /y $(ProjectDir)*.hlsl $(TargetDir)</Command>
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CameraObject.cpp" />
     <ClCompile Include="D3DApp.cpp" />
     <ClCompile Include="GeometryObject.cpp" />
-    <ClCompile Include="MyString.cpp" />
+    <ClCompile Include="GeometryObjectFactory.cpp" />
     <ClCompile Include="PCH.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>

@@ -1,14 +1,18 @@
-﻿#pragma once
+// PracticeD3D11
+
+#pragma once
 
 class GeometryObject
 {
 public:
     GeometryObject();
-    virtual ~GeometryObject() noexcept;
+    virtual ~GeometryObject() = default;
 
     void Initialize(ID3D11Device* D3DDevice);
 
     void Update();
+
+    void Release();
 
     void SetPosition(float x, float y, float z) noexcept;
     void SetRotationDegree(float roll, float pitch, float yaw);
