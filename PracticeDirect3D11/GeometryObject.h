@@ -21,10 +21,15 @@ public:
 
     const DirectX::XMMATRIX* GetWorldMatrix() const noexcept;
 
+    ID3D11InputLayout* GetInputLayout() const noexcept;
+
 protected:
     DirectX::XMVECTOR _Position;
     DirectX::XMVECTOR _Rotation;
     DirectX::XMVECTOR _Scale;
 
     DirectX::XMMATRIX _matWorld;
+
+    ID3D11VertexShader* _D3DVertexShader = nullptr;
+    ID3D11InputLayout* _D3DInputLayoutVertex1 = nullptr;
 };
