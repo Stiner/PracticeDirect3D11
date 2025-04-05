@@ -1,4 +1,4 @@
-﻿// PracticeD3D11
+// PracticeD3D11
 
 #include "PCH.h"
 #include "Resource.h"
@@ -102,8 +102,8 @@ void CD3D11App::Release()
     COM_RELEASE(_D3DRenderTargetView);
     COM_RELEASE(_DXGISwapChain1);
     COM_RELEASE(_DXGISwapChain);
-    _D3DImmediateDevContext1->ClearState(); COM_RELEASE(_D3DImmediateDevContext1);
-    _D3DImmediateDevContext->ClearState(); COM_RELEASE(_D3DImmediateDevContext);
+    _D3DDeviceContext1->ClearState(); COM_RELEASE(_D3DDeviceContext1);
+    _D3DDeviceContext->ClearState(); COM_RELEASE(_D3DDeviceContext);
     COM_RELEASE(_D3DDevice1);
     COM_RELEASE(_D3DDevice);
 }
@@ -112,7 +112,7 @@ bool CD3D11App::OnResize()
 {
     HRESULT hr = S_OK;
 
-    assert(_D3DImmediateDevContext1 || _D3DImmediateDevContext);
+    assert(_D3DDeviceContext1 || _D3DDeviceContext);
     assert(_D3DDevice1 || _D3DDevice);
     assert(_DXGISwapChain1 || _DXGISwapChain);
 
@@ -168,7 +168,7 @@ bool CD3D11App::OnResize()
 
     {
         // 두번째 인자는 배열 포인터. 첫번째 인자로 배열 갯수
-        _D3DImmediateDevContext->OMSetRenderTargets(1, &_D3DRenderTargetView, _D3DDepthStencilView);
+        _D3DDeviceContext->OMSetRenderTargets(1, &_D3DRenderTargetView, _D3DDepthStencilView);
     }
 
     // Viewport 설정
@@ -181,7 +181,7 @@ bool CD3D11App::OnResize()
         _D3DScreenViewport.TopLeftY = 0;
 
         // 두번째 인자는 배열 포인터. 첫번째 인자로 배열 갯수
-        _D3DImmediateDevContext->RSSetViewports(1, &_D3DScreenViewport);
+        _D3DDeviceContext->RSSetViewports(1, &_D3DScreenViewport);
     }
 
     return SUCCEEDED(hr);
@@ -191,11 +191,11 @@ void CD3D11App::Draw()
 {
     HRESULT hr;
 
-    assert(_D3DImmediateDevContext);
+    assert(_D3DDeviceContext);
     assert(_DXGISwapChain);
 
-    _D3DImmediateDevContext->ClearRenderTargetView(_D3DRenderTargetView, _ClearColor);
-    _D3DImmediateDevContext->ClearDepthStencilView(_D3DDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+    _D3DDeviceContext->ClearRenderTargetView(_D3DRenderTargetView, _ClearColor);
+    _D3DDeviceContext->ClearDepthStencilView(_D3DDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
     DrawScene();
 
@@ -406,11 +406,11 @@ bool CD3D11App::InitDirect3D()
 
             hr = D3D11CreateDevice(nullptr, _D3DDriverType, nullptr, createDeviceFlags,
                 featureLevels, numFeatureLevels, D3D11_SDK_VERSION,
-                &_D3DDevice, &_D3DFeatureLevel, &_D3DImmediateDevContext);
+                &_D3DDevice, &_D3DFeatureLevel, &_D3DDeviceContext);
             if (hr == E_INVALIDARG)
             {
                 // DirectX 11.0 플랫폼은 D3D_FEATURE_LEVEL_11_1을 인식하지 못하므로 이를 제외하고 다시 시도
-                hr = D3D11CreateDevice(nullptr, _D3DDriverType, nullptr, createDeviceFlags, &featureLevels[1], numFeatureLevels - 1, D3D11_SDK_VERSION, &_D3DDevice, &_D3DFeatureLevel, &_D3DImmediateDevContext);
+                hr = D3D11CreateDevice(nullptr, _D3DDriverType, nullptr, createDeviceFlags, &featureLevels[1], numFeatureLevels - 1, D3D11_SDK_VERSION, &_D3DDevice, &_D3DFeatureLevel, &_D3DDeviceContext);
             }
 
             if (SUCCEEDED(hr))
@@ -424,7 +424,7 @@ bool CD3D11App::InitDirect3D()
         if (_D3DFeatureLevel == D3D_FEATURE_LEVEL_11_1)
         {
             hr = _D3DDevice->QueryInterface(__uuidof(ID3D11Device1), reinterpret_cast<void**>(&_D3DDevice1));
-            hr = _D3DImmediateDevContext->QueryInterface(__uuidof(ID3D11DeviceContext1), reinterpret_cast<void**>(&_D3DImmediateDevContext1));
+            hr = _D3DDeviceContext->QueryInterface(__uuidof(ID3D11DeviceContext1), reinterpret_cast<void**>(&_D3DDeviceContext1));
         }
 
         if (FAILED(hr))

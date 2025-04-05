@@ -11,6 +11,7 @@ public:
     void Initialize(ID3D11Device* D3DDevice);
 
     void Update();
+    void Draw(ID3D11DeviceContext* D3DDeviceContext, ID3D11Buffer* D3DConstantBuffer) const;
 
     void Release();
 
@@ -30,6 +31,7 @@ protected:
 
     DirectX::XMMATRIX _matWorld;
 
+    ID3D11InputLayout* _D3DInputLayoutVertex = nullptr;
     ID3D11VertexShader* _D3DVertexShader = nullptr;
-    ID3D11InputLayout* _D3DInputLayoutVertex1 = nullptr;
+    ID3D11PixelShader* _D3DPixelShader = nullptr;
 };

@@ -1,10 +1,10 @@
 // PracticeD3D11
 
 #include "PCH.h"
-#include "GeometryObjectFactory.h"
+#include "GeometryObjectManager.h"
 #include "GeometryObject.h"
 
-GeometryObject* GeometryObjectFactory::Create(ID3D11Device* _D3DDevice, bool doInitialize)
+GeometryObject* GeometryObjectManager::Create(ID3D11Device* _D3DDevice, bool doInitialize)
 {
     GeometryObject* newGeometry = new GeometryObject();
 
@@ -16,7 +16,7 @@ GeometryObject* GeometryObjectFactory::Create(ID3D11Device* _D3DDevice, bool doI
     return newGeometry;
 }
 
-void GeometryObjectFactory::Remove(GeometryObject*& geometryObj)
+void GeometryObjectManager::Remove(GeometryObject*& geometryObj)
 {
     auto it = std::find(_container.begin(), _container.end(), geometryObj);
     if (it != _container.end())
@@ -29,7 +29,17 @@ void GeometryObjectFactory::Remove(GeometryObject*& geometryObj)
     }
 }
 
-const std::vector<GeometryObject*>& GeometryObjectFactory::GetContainer() noexcept
+void GeometryObjectManager::RemoveAll()
+{
+    for (auto& geometryObj : _container)
+    {
+        geometryObj->Release();
+        MEM_DELETE(geometryObj);
+    }
+    _container.clear();
+}
+
+const std::vector<GeometryObject*>& GeometryObjectManager::GetContainer() noexcept
 {
     return _container;
 }

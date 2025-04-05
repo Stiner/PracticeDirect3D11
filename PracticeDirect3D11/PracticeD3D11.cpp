@@ -5,7 +5,7 @@
 #include <vector>
 #include "PracticeD3D11.h"
 #include "GeometryObject.h"
-#include "GeometryObjectFactory.h"
+#include "GeometryObjectManager.h"
 #include "CameraObject.h"
 
 int APIENTRY wWinMain(_In_     HINSTANCE hInstance,
@@ -36,7 +36,7 @@ bool CPracticeD3D11::Initialize()
 {
     bool r = __super::Initialize();
 
-    _factoryGeometry.reset(new GeometryObjectFactory());
+    _factoryGeometry.reset(new GeometryObjectManager());
     _factoryGeometry->Create(_D3DDevice);
 
     _camera.reset(new CameraObject());
@@ -71,6 +71,12 @@ void CPracticeD3D11::UpdateScene(float dt)
 
 void CPracticeD3D11::DrawScene()
 {
+    const auto geometryObjects = _factoryGeometry->GetContainer();
+    for (auto& geometry : geometryObjects)
+    {
+        geometry->Draw(_D3DDeviceContext, nullptr);
+    }
+    _DXGISwapChain->Present(0, 0);
 }
 
 LRESULT CPracticeD3D11::MsgProc(HWND hwnd, uint32 msg, WPARAM wParam, LPARAM lParam)

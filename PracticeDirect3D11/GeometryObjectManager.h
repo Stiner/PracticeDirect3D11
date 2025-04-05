@@ -7,14 +7,16 @@
 class GeometryObject;
 struct GeometryContainer;
 
-class GeometryObjectFactory
+class GeometryObjectManager
 {
 public:
-    GeometryObjectFactory() = default;
-    ~GeometryObjectFactory() = default;
+    GeometryObjectManager() = default;
+    ~GeometryObjectManager() = default;
 
     GeometryObject* Create(ID3D11Device* _D3DDevice, bool doInitialize = true);
     void Remove(GeometryObject*& geometryObj);
+
+    void RemoveAll();
 
     const std::vector<GeometryObject*>& GetContainer() noexcept;
 

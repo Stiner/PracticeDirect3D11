@@ -1,4 +1,4 @@
-﻿// PracticeD3D11
+// PracticeD3D11
 
 #pragma once
 
@@ -54,8 +54,8 @@ protected:
     ID3D11Device* _D3DDevice = nullptr;
     ID3D11Device1* _D3DDevice1 = nullptr;
 
-    ID3D11DeviceContext* _D3DImmediateDevContext = nullptr;
-    ID3D11DeviceContext1* _D3DImmediateDevContext1 = nullptr;
+    ID3D11DeviceContext* _D3DDeviceContext = nullptr;
+    ID3D11DeviceContext1* _D3DDeviceContext1 = nullptr;
 
     IDXGISwapChain* _DXGISwapChain = nullptr;
     IDXGISwapChain1* _DXGISwapChain1 = nullptr;
