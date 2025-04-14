@@ -1,11 +1,10 @@
 // PracticeD3D11
 
 #include "PCH.h"
-#include <DirectXMath.h>
-#include <vector>
 #include "PracticeD3D11.h"
-#include "GeometryObject.h"
-#include "GeometryObjectManager.h"
+
+#include "MeshObject.h"
+#include "ObjectManager.h"
 #include "CameraObject.h"
 
 int APIENTRY wWinMain(_In_     HINSTANCE hInstance,
@@ -36,23 +35,24 @@ bool CPracticeD3D11::Initialize()
 {
     bool r = __super::Initialize();
 
-    _factoryGeometry.reset(new GeometryObjectManager());
-    _factoryGeometry->Create(_D3DDevice);
+    _ObjectManager.reset(new ObjectManager());
+    _ObjectManager->Create(_D3DDevice);
 
-    _camera.reset(new CameraObject());
-    _camera->SetFov(90.0f);
-    _camera->SetAspectRatio(GetAspectRatio());
-    _camera->SetNear(0.1f);
-    _camera->SetFar(1000.0f);
+    _CameraObject.reset(new CameraObject());
+    _CameraObject->SetFov(90.0f);
+    _CameraObject->SetAspectRatio(GetAspectRatio());
+    _CameraObject->SetNear(0.1f);
+    _CameraObject->SetFar(1000.0f);
 
     return r;
 }
 
 void CPracticeD3D11::Release()
 {
-    __super::Release();
+    _ObjectManager->RemoveAll();
+    _ObjectManager.release();
 
-    _factoryGeometry.release();
+    __super::Release();
 }
 
 bool CPracticeD3D11::OnResize()
@@ -60,23 +60,20 @@ bool CPracticeD3D11::OnResize()
     return __super::OnResize();
 }
 
-void CPracticeD3D11::UpdateScene(float dt)
+void CPracticeD3D11::UpdateScene(float DeltaTime)
 {
-    const auto geometryObjects = _factoryGeometry->GetContainer();
-    for (auto& geometry : geometryObjects)
+    for (auto& Object : _ObjectManager->GetContainer())
     {
-        geometry->Update();
+        Object->Update(DeltaTime);
     }
 }
 
 void CPracticeD3D11::DrawScene()
 {
-    const auto geometryObjects = _factoryGeometry->GetContainer();
-    for (auto& geometry : geometryObjects)
+    for (auto& Object : _ObjectManager->GetContainer())
     {
-        geometry->Draw(_D3DDeviceContext, nullptr);
+        Object->Draw(_D3DDeviceContext);
     }
-    _DXGISwapChain->Present(0, 0);
 }
 
 LRESULT CPracticeD3D11::MsgProc(HWND hwnd, uint32 msg, WPARAM wParam, LPARAM lParam)

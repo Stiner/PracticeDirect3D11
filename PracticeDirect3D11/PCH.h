@@ -1,4 +1,4 @@
-﻿// PracticeD3D11
+// PracticeD3D11
 
 #pragma once
 
@@ -47,3 +47,5 @@ typedef unsigned long long  uint64;
 
 typedef unsigned char   byte;
 typedef unsigned short  word;
+
+using namespace DirectX;

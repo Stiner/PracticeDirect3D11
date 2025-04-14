@@ -102,8 +102,9 @@ xcopy /y $(ProjectDir)*.hlsl $(TargetDir)</Command>
   <ItemGroup>
     <ClInclude Include="CameraObject.h" />
     <ClInclude Include="D3DApp.h" />
-    <ClInclude Include="GeometryObject.h" />
-    <ClInclude Include="GeometryObjectManager.h" />
+    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="MeshObject.h" />
+    <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="PCH.h" />
     <ClInclude Include="GameTimer.h" />
     <ClInclude Include="PracticeD3D11.h" />
@@ -114,8 +115,9 @@ xcopy /y $(ProjectDir)*.hlsl $(TargetDir)</Command>
   <ItemGroup>
     <ClCompile Include="CameraObject.cpp" />
     <ClCompile Include="D3DApp.cpp" />
-    <ClCompile Include="GeometryObject.cpp" />
-    <ClCompile Include="GeometryObjectManager.cpp" />
+    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="MeshObject.cpp" />
+    <ClCompile Include="ObjectManager.cpp" />
     <ClCompile Include="PCH.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -142,14 +144,14 @@ xcopy /y $(ProjectDir)*.hlsl $(TargetDir)</Command>
     <FxCompile Include="MyShader_PS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">PS</EntryPointName>
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">PS</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">PS_main</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">PS_main</EntryPointName>
     </FxCompile>
     <FxCompile Include="MyShader_VS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VS</EntryPointName>
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">VS</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VS_main</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">VS_main</EntryPointName>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

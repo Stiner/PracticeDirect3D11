@@ -1,8 +1,9 @@
 // PracticeD3D11
 
 #include "PCH.h"
-#include "Resource.h"
 #include "D3DApp.h"
+
+#include "Resource.h"
 #include <sstream>
 
 namespace

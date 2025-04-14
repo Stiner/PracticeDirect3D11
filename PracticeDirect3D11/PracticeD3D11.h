@@ -4,7 +4,7 @@
 
 #include "D3DApp.h"
 
-class GeometryObjectManager;
+class ObjectManager;
 class CameraObject;
 
 class CPracticeD3D11 : public CD3D11App
@@ -26,6 +26,6 @@ public:
     virtual void OnMouseMove(WPARAM btnState, int x, int y) override;
 
 protected:
-    std::unique_ptr<GeometryObjectManager> _factoryGeometry;
-    std::unique_ptr<CameraObject> _camera;
+    std::unique_ptr<ObjectManager> _ObjectManager;
+    std::unique_ptr<CameraObject> _CameraObject;
 };

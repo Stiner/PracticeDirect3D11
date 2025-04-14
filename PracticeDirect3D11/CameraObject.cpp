@@ -3,10 +3,6 @@
 #include "PCH.h"
 #include "CameraObject.h"
 
-#include <DirectXMath.h>
-
-using namespace DirectX;
-
 CameraObject::CameraObject()
     : _Position({ 0, 0, 0, 0 })
     , _Rotation({ 0, 0, 0, 0 })

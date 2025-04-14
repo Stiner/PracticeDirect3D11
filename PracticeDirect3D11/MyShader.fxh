@@ -4,7 +4,6 @@
 struct VertexInput
 {
     float3 Position : POSITION;
-    //float3 Normal : NORMAL;
     float4 Color : COLOR;
     //float2 TexCoord0 : TEXCOORD0;
     //float2 TexCorrd1 : TEXCOORD1;
@@ -12,13 +11,24 @@ struct VertexInput
 
 struct VertexOutput
 {
-    //float3 Normal;
-    float4 Color;
+    float4 Position : SV_Position;
+    float4 Color : COLOR;
 };
 
-VertexOutput VS(VertexInput i) : SV_Position
+cbuffer cbPerObject
+{
+    float4x4 gMatWorldViewProj;
+};
+
+//sampler2D gSamplerDiffuse;
+//sampler2D gSamplerNormal;
+
+VertexOutput VS_main(VertexInput i)
 {
     VertexOutput o;
+    // 동차 절단 공간으로 변환
+    o.Position = mul(float4(i.Position, 1.0f), gMatWorldViewProj);
+    // 정점 색은 그대로 픽셀 쉐이더로 전달
     o.Color = i.Color;
 
     return o;
@@ -27,7 +37,8 @@ VertexOutput VS(VertexInput i) : SV_Position
 //--------------------------------------------------------------------------------------
 // Pixel Shader
 //--------------------------------------------------------------------------------------
-float4 PS(VertexOutput i : SV_Position) : SV_Target
+float4 PS_main(VertexOutput i) : SV_Target
 {
     return i.Color;
+    //return i.Color * tex2D(gSamplerDiffuse, i.TexCoord0);
 }
