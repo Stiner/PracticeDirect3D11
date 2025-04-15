@@ -3,7 +3,7 @@
 #include "PCH.h"
 #include "PracticeD3D11.h"
 
-#include "MeshObject.h"
+#include "MeshRendererObject.h"
 #include "ObjectManager.h"
 #include "CameraObject.h"
 

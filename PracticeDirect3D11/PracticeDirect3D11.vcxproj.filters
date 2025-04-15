@@ -44,7 +44,7 @@
     <ClInclude Include="PracticeD3D11.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="MeshObject.h">
+    <ClInclude Include="MeshRendererObject.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="CameraObject.h">
@@ -73,7 +73,7 @@
     <ClCompile Include="PracticeD3D11.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="MeshObject.cpp">
+    <ClCompile Include="MeshRendererObject.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="CameraObject.cpp">

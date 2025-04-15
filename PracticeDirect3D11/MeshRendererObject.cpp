@@ -1,12 +1,12 @@
 // PracticeD3D11
 
 #include "PCH.h"
-#include "MeshObject.h"
+#include "MeshRendererObject.h"
 
 #include "Mesh.h"
 #include "Utility.h"
 
-MeshObject::MeshObject()
+MeshRendererObject::MeshRendererObject()
     : _Position({ 0, 0, 0, 0 })
     , _Rotation({ 0, 0, 0, 0 })
     , _Scale({ 0, 0, 0, 0 })
@@ -14,7 +14,7 @@ MeshObject::MeshObject()
 {
 }
 
-void MeshObject::Initialize(ID3D11Device* D3DDevice)
+void MeshRendererObject::Initialize(ID3D11Device* D3DDevice)
 {
     _Mesh = new Mesh();
     _Mesh->Load();
@@ -24,7 +24,7 @@ void MeshObject::Initialize(ID3D11Device* D3DDevice)
     InitBuffer(D3DDevice);
 }
 
-void MeshObject::Update(float DeltaTime)
+void MeshRendererObject::Update(float DeltaTime)
 {
     XMMATRIX matTranslate = XMMatrixTranslationFromVector(_Position);
     XMMATRIX matRotation  = XMMatrixRotationRollPitchYawFromVector(_Rotation);
@@ -33,7 +33,7 @@ void MeshObject::Update(float DeltaTime)
     _matWorld = matScale * matRotation * matTranslate;
 }
 
-void MeshObject::Draw(ID3D11DeviceContext* D3DDeviceContext) const
+void MeshRendererObject::Draw(ID3D11DeviceContext* D3DDeviceContext) const
 {
     assert(D3DDeviceContext);
 
@@ -58,24 +58,33 @@ void MeshObject::Draw(ID3D11DeviceContext* D3DDeviceContext) const
     assert(_D3DPixelShader);
     D3DDeviceContext->PSSetShader(_D3DPixelShader, nullptr, 0);
 
+    assert(_D3DRasterizerState);
+    D3DDeviceContext->RSSetState(_D3DRasterizerState);
+
     D3DDeviceContext->DrawIndexed(_Mesh->GetNumIndices(), 0, 0);
 }
 
-void MeshObject::Release()
+void MeshRendererObject::Release()
 {
-    COM_RELEASE(_D3DVertexShader);
     COM_RELEASE(_D3DInputLayout);
+    COM_RELEASE(_D3DVertexShader);
+    COM_RELEASE(_D3DPixelShader);
+    COM_RELEASE(_D3DRasterizerState);
+
+    COM_RELEASE(_D3DVertexBuffer);
+    COM_RELEASE(_D3DIndexBuffer);
+    COM_RELEASE(_D3DConstantBuffer);
 
     _Mesh->Release();
     MEM_DELETE(_Mesh);
 }
 
-void MeshObject::SetPosition(float x, float y, float z) noexcept
+void MeshRendererObject::SetPosition(float x, float y, float z) noexcept
 {
     _Position = { x, y, z };
 }
 
-void MeshObject::SetRotationDegree(float roll, float pitch, float yaw)
+void MeshRendererObject::SetRotationDegree(float roll, float pitch, float yaw)
 {
     _Rotation = XMQuaternionRotationRollPitchYaw(
         XMConvertToRadians(pitch),
@@ -84,27 +93,27 @@ void MeshObject::SetRotationDegree(float roll, float pitch, float yaw)
     );
 }
 
-void MeshObject::SetRotationRadian(float roll, float pitch, float yaw)
+void MeshRendererObject::SetRotationRadian(float roll, float pitch, float yaw)
 {
     _Rotation = XMQuaternionRotationRollPitchYaw(roll, pitch, yaw);
 }
 
-void MeshObject::SetScale(float x, float y, float z) noexcept
+void MeshRendererObject::SetScale(float x, float y, float z) noexcept
 {
     _Scale = { x, y, z };
 }
 
-const DirectX::XMMATRIX* MeshObject::GetWorldMatrix() const noexcept
+const DirectX::XMMATRIX* MeshRendererObject::GetWorldMatrix() const noexcept
 {
     return &_matWorld;
 }
 
-ID3D11InputLayout* MeshObject::GetInputLayout() const noexcept
+ID3D11InputLayout* MeshRendererObject::GetInputLayout() const noexcept
 {
     return _D3DInputLayout;
 }
 
-void MeshObject::InitVertexShader(ID3D11Device* D3DDevice)
+void MeshRendererObject::InitVertexShader(ID3D11Device* D3DDevice)
 {
     HRESULT hr = S_OK;
 
@@ -127,7 +136,7 @@ void MeshObject::InitVertexShader(ID3D11Device* D3DDevice)
     COM_RELEASE(VertexShaderBlob);
 }
 
-void MeshObject::InitInputLayout(ID3D11Device* D3DDevice, ID3DBlob* VertexShaderBlob)
+void MeshRendererObject::InitInputLayout(ID3D11Device* D3DDevice, ID3DBlob* VertexShaderBlob)
 {
     HRESULT hr = S_OK;
 
@@ -140,7 +149,7 @@ void MeshObject::InitInputLayout(ID3D11Device* D3DDevice, ID3DBlob* VertexShader
     assert(SUCCEEDED(hr));
 }
 
-void MeshObject::InitPixelShader(ID3D11Device* D3DDevice)
+void MeshRendererObject::InitPixelShader(ID3D11Device* D3DDevice)
 {
     HRESULT hr = S_OK;
 
@@ -162,7 +171,7 @@ void MeshObject::InitPixelShader(ID3D11Device* D3DDevice)
     COM_RELEASE(PixelShaderBlob);
 }
 
-void MeshObject::InitBuffer(ID3D11Device* D3DDevice)
+void MeshRendererObject::InitBuffer(ID3D11Device* D3DDevice)
 {
     HRESULT hr = S_OK;
 
@@ -170,8 +179,8 @@ void MeshObject::InitBuffer(ID3D11Device* D3DDevice)
     descVertexBuffer.Usage               = D3D11_USAGE_DEFAULT;
     descVertexBuffer.ByteWidth           = _Mesh->GetVertexSize() * _Mesh->GetNumVertex();
     descVertexBuffer.BindFlags           = D3D11_BIND_VERTEX_BUFFER;
-    descVertexBuffer.CPUAccessFlags      = 0;
-    descVertexBuffer.MiscFlags           = 0;
+    descVertexBuffer.CPUAccessFlags      = (D3D11_CPU_ACCESS_FLAG)0;
+    descVertexBuffer.MiscFlags           = (D3D11_RESOURCE_MISC_FLAG)0;
     descVertexBuffer.StructureByteStride = 0;
 
     D3D11_SUBRESOURCE_DATA descVertexSubResData = {};
@@ -186,8 +195,8 @@ void MeshObject::InitBuffer(ID3D11Device* D3DDevice)
     descIndexBuffer.Usage               = D3D11_USAGE_DEFAULT;
     descIndexBuffer.ByteWidth           = _Mesh->GetIndexSize() * _Mesh->GetNumIndices();
     descIndexBuffer.BindFlags           = D3D11_BIND_INDEX_BUFFER;
-    descIndexBuffer.CPUAccessFlags      = 0;
-    descIndexBuffer.MiscFlags           = 0;
+    descIndexBuffer.CPUAccessFlags      = (D3D11_CPU_ACCESS_FLAG)0;
+    descIndexBuffer.MiscFlags           = (D3D11_RESOURCE_MISC_FLAG)0;
     descIndexBuffer.StructureByteStride = 0;
 
     D3D11_SUBRESOURCE_DATA descIndexSubResDataIndex = {};
@@ -196,5 +205,25 @@ void MeshObject::InitBuffer(ID3D11Device* D3DDevice)
     descIndexSubResDataIndex.SysMemSlicePitch = 0;
 
     hr = D3DDevice->CreateBuffer(&descIndexBuffer, &descIndexSubResDataIndex, &_D3DIndexBuffer);
+    assert(SUCCEEDED(hr));
+}
+
+void MeshRendererObject::InitRasterizerState(ID3D11Device* D3DDevice)
+{
+    HRESULT hr = S_OK;
+
+    D3D11_RASTERIZER_DESC descRasterizer = {};
+    descRasterizer.FillMode              = D3D11_FILL_SOLID;
+    descRasterizer.CullMode              = D3D11_CULL_BACK;
+    descRasterizer.FrontCounterClockwise = false;
+    descRasterizer.DepthBias             = D3D11_DEFAULT_DEPTH_BIAS;
+    descRasterizer.DepthBiasClamp        = D3D11_DEFAULT_DEPTH_BIAS_CLAMP;
+    descRasterizer.SlopeScaledDepthBias  = D3D11_DEFAULT_SLOPE_SCALED_DEPTH_BIAS;
+    descRasterizer.DepthClipEnable       = true;
+    descRasterizer.ScissorEnable         = false;
+    descRasterizer.MultisampleEnable     = false;
+    descRasterizer.AntialiasedLineEnable = false;
+
+    hr = D3DDevice->CreateRasterizerState(&descRasterizer, &_D3DRasterizerState);
     assert(SUCCEEDED(hr));
 }

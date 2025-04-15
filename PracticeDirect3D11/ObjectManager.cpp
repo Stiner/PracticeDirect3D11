@@ -3,11 +3,11 @@
 #include "PCH.h"
 #include "ObjectManager.h"
 
-#include "MeshObject.h"
+#include "MeshRendererObject.h"
 
-MeshObject* ObjectManager::Create(ID3D11Device* D3DDevice, bool DoInitialize)
+MeshRendererObject* ObjectManager::Create(ID3D11Device* D3DDevice, bool DoInitialize)
 {
-    MeshObject* newObject = new MeshObject();
+    MeshRendererObject* newObject = new MeshRendererObject();
 
     if (DoInitialize)
         newObject->Initialize(D3DDevice);
@@ -17,7 +17,7 @@ MeshObject* ObjectManager::Create(ID3D11Device* D3DDevice, bool DoInitialize)
     return newObject;
 }
 
-void ObjectManager::Remove(MeshObject*& TargetObject)
+void ObjectManager::Remove(MeshRendererObject*& TargetObject)
 {
     auto it = std::find(_Container.begin(), _Container.end(), TargetObject);
     if (it != _Container.end())

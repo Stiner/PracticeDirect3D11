@@ -4,11 +4,11 @@
 
 class Mesh;
 
-class MeshObject
+class MeshRendererObject
 {
 public:
-    MeshObject();
-    virtual ~MeshObject() = default;
+    MeshRendererObject();
+    virtual ~MeshRendererObject() = default;
 
     void Initialize(ID3D11Device* D3DDevice);
 
@@ -31,6 +31,7 @@ protected:
     virtual void InitInputLayout(ID3D11Device* D3DDevice, ID3DBlob* VertexShaderBlob);
     virtual void InitPixelShader(ID3D11Device* D3DDevice);
     virtual void InitBuffer(ID3D11Device* D3DDevice);
+    virtual void InitRasterizerState(ID3D11Device* D3DDevice);
 
 protected:
     DirectX::XMVECTOR _Position;
@@ -44,6 +45,7 @@ protected:
     ID3D11InputLayout* _D3DInputLayout = nullptr;
     ID3D11VertexShader* _D3DVertexShader = nullptr;
     ID3D11PixelShader* _D3DPixelShader = nullptr;
+    ID3D11RasterizerState* _D3DRasterizerState = nullptr;
 
     ID3D11Buffer* _D3DVertexBuffer = nullptr;
     ID3D11Buffer* _D3DIndexBuffer = nullptr;

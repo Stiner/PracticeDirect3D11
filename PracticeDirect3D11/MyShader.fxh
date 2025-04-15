@@ -20,6 +20,20 @@ cbuffer cbPerObject
     float4x4 gMatWorldViewProj;
 };
 
+//cbuffer cbPerFrame
+//{
+//    float4 gLightDirection;
+//    float4 gLightColor;
+//    float4 gAmbientColor;
+//};
+
+//cbuffer cbRarely
+//{
+//    float4 gFogColor;
+//    float gFogStart;
+//    float gFogEnd;
+//};
+
 //sampler2D gSamplerDiffuse;
 //sampler2D gSamplerNormal;
 

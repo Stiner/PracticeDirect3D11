@@ -103,7 +103,7 @@ xcopy /y $(ProjectDir)*.hlsl $(TargetDir)</Command>
     <ClInclude Include="CameraObject.h" />
     <ClInclude Include="D3DApp.h" />
     <ClInclude Include="Mesh.h" />
-    <ClInclude Include="MeshObject.h" />
+    <ClInclude Include="MeshRendererObject.h" />
     <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="PCH.h" />
     <ClInclude Include="GameTimer.h" />
@@ -116,7 +116,7 @@ xcopy /y $(ProjectDir)*.hlsl $(TargetDir)</Command>
     <ClCompile Include="CameraObject.cpp" />
     <ClCompile Include="D3DApp.cpp" />
     <ClCompile Include="Mesh.cpp" />
-    <ClCompile Include="MeshObject.cpp" />
+    <ClCompile Include="MeshRendererObject.cpp" />
     <ClCompile Include="ObjectManager.cpp" />
     <ClCompile Include="PCH.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

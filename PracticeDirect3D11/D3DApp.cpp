@@ -98,6 +98,8 @@ bool CD3D11App::Initialize()
 
 void CD3D11App::Release()
 {
+    COM_RELEASE(_D3DRasterizerState);
+
     COM_RELEASE(_D3DDepthStencilView);
     COM_RELEASE(_D3DDepthStencilBuffer);
     COM_RELEASE(_D3DRenderTargetView);
@@ -125,18 +127,15 @@ bool CD3D11App::OnResize()
 
     {
         hr = _DXGISwapChain->ResizeBuffers(1, _ClientWidth, _ClientHeight, DXGI_FORMAT_R8G8B8A8_UNORM, 0);
-        assert(SUCCEEDED(hr));
-        if (FAILED(hr)) return false;
+        if (FAILED(hr)) { assert(SUCCEEDED(hr)); return false; }
 
         ID3D11Texture2D* backBuffer;
         hr = _DXGISwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&backBuffer));
-        assert(SUCCEEDED(hr));
-        if (FAILED(hr)) return false;
+        if (FAILED(hr)) { assert(SUCCEEDED(hr)); return false; }
 
         hr = _D3DDevice->CreateRenderTargetView(backBuffer, 0, &_D3DRenderTargetView);
         COM_RELEASE(backBuffer);
-        assert(SUCCEEDED(hr));
-        if (FAILED(hr)) return false;
+        if (FAILED(hr)) { assert(SUCCEEDED(hr)); return false; }
     }
 
     // DepthStencil을 위한 ID3DTexture2D Buffer 생성 및 ID3DDepthStencilView 생성
@@ -157,14 +156,12 @@ bool CD3D11App::OnResize()
         D3D11_SUBRESOURCE_DATA subResourceData = {};
 
         hr = _D3DDevice->CreateTexture2D(&descDepthStencilBuffer, nullptr/*&subResourceData*/, &_D3DDepthStencilBuffer);
-        assert(SUCCEEDED(hr));
-        if (FAILED(hr)) return false;
+        if (FAILED(hr)) { assert(SUCCEEDED(hr)); return false; }
 
         D3D11_DEPTH_STENCIL_VIEW_DESC descDepthStencilView = {};
 
         hr = _D3DDevice->CreateDepthStencilView(_D3DDepthStencilBuffer, nullptr/*&descDepthStencilView*/, &_D3DDepthStencilView);
-        assert(SUCCEEDED(hr));
-        if (FAILED(hr)) return false;
+        if (FAILED(hr)) { assert(SUCCEEDED(hr)); return false; }
     }
 
     {
@@ -193,13 +190,17 @@ void CD3D11App::Draw()
     HRESULT hr;
 
     assert(_D3DDeviceContext);
-    assert(_DXGISwapChain);
-
+    assert(_D3DRenderTargetView);
     _D3DDeviceContext->ClearRenderTargetView(_D3DRenderTargetView, _ClearColor);
+    assert(_D3DDepthStencilView);
     _D3DDeviceContext->ClearDepthStencilView(_D3DDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+
+    assert(_D3DRasterizerState);
+    _D3DDeviceContext->RSSetState(_D3DRasterizerState);
 
     DrawScene();
 
+    assert(_DXGISwapChain);
     hr = _DXGISwapChain->Present(0, 0);
     assert(SUCCEEDED(hr));
 }
@@ -418,8 +419,8 @@ bool CD3D11App::InitDirect3D()
                 break;
         }
 
-        if (FAILED(hr))
-            return false;
+        
+        if (FAILED(hr)) { assert(SUCCEEDED(hr)); return false; }
 
         // DirectX 11.1 or later
         if (_D3DFeatureLevel == D3D_FEATURE_LEVEL_11_1)
@@ -428,8 +429,7 @@ bool CD3D11App::InitDirect3D()
             hr = _D3DDeviceContext->QueryInterface(__uuidof(ID3D11DeviceContext1), reinterpret_cast<void**>(&_D3DDeviceContext1));
         }
 
-        if (FAILED(hr))
-            return false;
+        if (FAILED(hr)) { assert(SUCCEEDED(hr)); return false; }
     }
 
     // 4x MSAA 품질 지원 확인
@@ -437,8 +437,7 @@ bool CD3D11App::InitDirect3D()
         hr = _D3DDevice->CheckMultisampleQualityLevels(DXGI_FORMAT_R8G8B8A8_UNORM, 4, &_Quality4xMSAA);
         _Enable4xMSAA = _Quality4xMSAA > 0;
 
-        if (FAILED(hr))
-            return false;
+        if (FAILED(hr)) { assert(SUCCEEDED(hr)); return false; }
     }
 
     // IDXGIFactory 생성해서 IDXGISwapChain 생성
@@ -448,19 +447,16 @@ bool CD3D11App::InitDirect3D()
         {
             IDXGIDevice* pDXGIDevice = nullptr;
             hr = _D3DDevice->QueryInterface(__uuidof(IDXGIDevice), reinterpret_cast<void**>(&pDXGIDevice));
-            if (FAILED(hr))
-                return false;
+            if (FAILED(hr)) { assert(SUCCEEDED(hr)); return false; }
 
             IDXGIAdapter* pDXGIAdapter = nullptr;
             hr = pDXGIDevice->GetAdapter(&pDXGIAdapter);
             COM_RELEASE(pDXGIDevice);
-            if (FAILED(hr))
-                return false;
+            if (FAILED(hr)) { assert(SUCCEEDED(hr)); return false; }
 
             hr = pDXGIAdapter->GetParent(__uuidof(IDXGIFactory1), reinterpret_cast<void**>(&pDXGIFactory1));
             COM_RELEASE(pDXGIAdapter);
-            if (FAILED(hr))
-                return false;
+            if (FAILED(hr)) { assert(SUCCEEDED(hr)); return false; }
         }
 
         // D3D 버전에 맞춰 IDXGISwapChain 생성
@@ -534,8 +530,7 @@ bool CD3D11App::InitDirect3D()
         }
 
         COM_RELEASE(pDXGIFactory1);
-        if (FAILED(hr))
-            return false;
+        if (FAILED(hr)) { assert(SUCCEEDED(hr)); return false; }
     }
 
     if (!OnResize())
