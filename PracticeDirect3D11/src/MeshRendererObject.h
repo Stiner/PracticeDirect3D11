@@ -12,6 +12,14 @@ public:
 
     void Initialize(ID3D11Device* D3DDevice);
 
+protected:
+    virtual void CreateVertexShader(ID3D11Device* D3DDevice);
+    virtual void InitInputLayout(ID3D11Device* D3DDevice, ID3DBlob* VertexShaderBlob);
+    virtual void CreatePixelShader(ID3D11Device* D3DDevice);
+    virtual void CreateBuffer(ID3D11Device* D3DDevice);
+    virtual void CreateRasterizerState(ID3D11Device* D3DDevice);
+
+public:
     void Update(float DeltaTime);
     void Draw(ID3D11DeviceContext* D3DDeviceContext) const;
 
@@ -26,12 +34,6 @@ public:
 
     ID3D11InputLayout* GetInputLayout() const noexcept;
 
-protected:
-    virtual void InitVertexShader(ID3D11Device* D3DDevice);
-    virtual void InitInputLayout(ID3D11Device* D3DDevice, ID3DBlob* VertexShaderBlob);
-    virtual void InitPixelShader(ID3D11Device* D3DDevice);
-    virtual void InitBuffer(ID3D11Device* D3DDevice);
-    virtual void InitRasterizerState(ID3D11Device* D3DDevice);
 
 protected:
     DirectX::XMVECTOR _Position;
@@ -39,15 +41,17 @@ protected:
     DirectX::XMVECTOR _Scale;
 
     DirectX::XMMATRIX _matWorld;
+    DirectX::XMMATRIX _matViewProj;
 
     Mesh* _Mesh = nullptr;
 
-    ID3D11InputLayout* _D3DInputLayout = nullptr;
-    ID3D11VertexShader* _D3DVertexShader = nullptr;
-    ID3D11PixelShader* _D3DPixelShader = nullptr;
+    ID3D11InputLayout*     _D3DInputLayout     = nullptr;
+    ID3D11VertexShader*    _D3DVertexShader    = nullptr;
+    ID3D11PixelShader*     _D3DPixelShader     = nullptr;
     ID3D11RasterizerState* _D3DRasterizerState = nullptr;
 
-    ID3D11Buffer* _D3DVertexBuffer = nullptr;
-    ID3D11Buffer* _D3DIndexBuffer = nullptr;
-    ID3D11Buffer* _D3DConstantBuffer = nullptr;
+    ID3D11Buffer* _D3DBufferVertex      = nullptr;
+    ID3D11Buffer* _D3DBufferIndex       = nullptr;
+    ID3D11Buffer* _D3DBufferMatWorld    = nullptr;
+    ID3D11Buffer* _D3DBufferMatViewProj = nullptr;
 };

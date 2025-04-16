@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------------------------
-// Vertex Shader
+// Unlit.fx
 //--------------------------------------------------------------------------------------
 struct VertexInput
 {
@@ -13,16 +13,26 @@ struct VertexOutput
     float4 Color : COLOR;
 };
 
-cbuffer cbPerObject
+//--------------------------------------------------------------------------------------
+// Vertex Shader
+//--------------------------------------------------------------------------------------
+cbuffer cbPerFrame : register(b0)
 {
-    float4x4 gMatWorldViewProj;
+    // 뷰, 투영 행렬
+    float4x4 gMatViewProj;
+};
+
+cbuffer cbPerObject : register(b1)
+{
+    // 월드 행렬
+    float4x4 gMatWorld;
 };
 
 VertexOutput VS_main(VertexInput i)
 {
     VertexOutput o;
     // 동차 절단 공간으로 변환
-    o.Position = mul(float4(i.Position, 1.0f), gMatWorldViewProj);
+    o.Position = mul(float4(i.Position, 1.0f), gMatWorld * gMatViewProj);
     // 정점 색은 그대로 픽셀 쉐이더로 전달
     o.Color = i.Color;
 

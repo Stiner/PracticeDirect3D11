@@ -68,10 +68,11 @@
     <FxCompile />
     <FxCompile>
       <ShaderModel>5.0</ShaderModel>
+      <EntryPointName />
     </FxCompile>
     <PostBuildEvent>
-      <Command>xcopy /y $(ProjectDir)*.fxh $(TargetDir)
-xcopy /y $(ProjectDir)*.hlsl $(TargetDir)</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -95,17 +96,26 @@ xcopy /y $(ProjectDir)*.hlsl $(TargetDir)</Command>
     </Link>
     <FxCompile>
       <ShaderModel>5.0</ShaderModel>
+      <EntryPointName />
     </FxCompile>
     <PostBuildEvent>
-      <Command>xcopy /y $(ProjectDir)*.fxh $(TargetDir)
-xcopy /y $(ProjectDir)*.hlsl $(TargetDir)</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="..\.editorconfig" />
     <None Include="..\README.md" />
     <None Include="doc\PracticeD3D11.md" />
-    <None Include="fx\Unlit.fx" />
+    <FxCompile Include="fx\Unlit.fx">
+      <FileType>Document</FileType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="fx\Unlit_PS.hlsl">

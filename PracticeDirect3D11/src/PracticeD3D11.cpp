@@ -35,14 +35,12 @@ bool CPracticeD3D11::Initialize()
 {
     bool r = __super::Initialize();
 
+    _CameraObject.reset(new CameraObject());
+	_CameraObject->Initialize(_D3DDevice);
+	_CameraObject->SetAspectRatio(GetAspectRatio());
+
     _ObjectManager.reset(new ObjectManager());
     _ObjectManager->Create(_D3DDevice);
-
-    _CameraObject.reset(new CameraObject());
-    _CameraObject->SetFov(90.0f);
-    _CameraObject->SetAspectRatio(GetAspectRatio());
-    _CameraObject->SetNear(0.1f);
-    _CameraObject->SetFar(1000.0f);
 
     return r;
 }
@@ -51,6 +49,9 @@ void CPracticeD3D11::Release()
 {
     _ObjectManager->RemoveAll();
     _ObjectManager.release();
+
+    _CameraObject->Release();
+	_CameraObject.release();
 
     __super::Release();
 }
@@ -62,6 +63,8 @@ bool CPracticeD3D11::OnResize()
 
 void CPracticeD3D11::UpdateScene(float DeltaTime)
 {
+    _CameraObject->Update(DeltaTime);
+
     for (auto& Object : _ObjectManager->GetContainer())
     {
         Object->Update(DeltaTime);
@@ -70,6 +73,8 @@ void CPracticeD3D11::UpdateScene(float DeltaTime)
 
 void CPracticeD3D11::DrawScene()
 {
+    _CameraObject->Draw(_D3DDeviceContext);
+
     for (auto& Object : _ObjectManager->GetContainer())
     {
         Object->Draw(_D3DDeviceContext);

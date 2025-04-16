@@ -24,9 +24,6 @@
     <None Include="doc\PracticeD3D11.md">
       <Filter>doc</Filter>
     </None>
-    <None Include="fx\Unlit.fx">
-      <Filter>fx</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\PracticeDirect3D11.ico">
@@ -110,6 +107,9 @@
       <Filter>fx</Filter>
     </FxCompile>
     <FxCompile Include="fx\Unlit_VS.hlsl">
+      <Filter>fx</Filter>
+    </FxCompile>
+    <FxCompile Include="fx\Unlit.fx">
       <Filter>fx</Filter>
     </FxCompile>
   </ItemGroup>
