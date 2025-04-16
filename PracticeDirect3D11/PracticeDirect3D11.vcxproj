@@ -100,62 +100,46 @@ xcopy /y $(ProjectDir)*.hlsl $(TargetDir)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="CameraObject.h" />
-    <ClInclude Include="D3DApp.h" />
-    <ClInclude Include="Mesh.h" />
-    <ClInclude Include="MeshRendererObject.h" />
-    <ClInclude Include="ObjectManager.h" />
-    <ClInclude Include="PCH.h" />
-    <ClInclude Include="GameTimer.h" />
-    <ClInclude Include="PracticeD3D11.h" />
-    <ClInclude Include="Resource.h" />
-    <ClInclude Include="Utility.h" />
-    <ClInclude Include="targetver.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="CameraObject.cpp" />
-    <ClCompile Include="D3DApp.cpp" />
-    <ClCompile Include="Mesh.cpp" />
-    <ClCompile Include="MeshRendererObject.cpp" />
-    <ClCompile Include="ObjectManager.cpp" />
-    <ClCompile Include="PCH.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="GameTimer.cpp" />
-    <ClCompile Include="PracticeD3D11.cpp" />
-    <ClCompile Include="Utility.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="PracticeDirect3D11.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="PracticeDirect3D11.ico" />
-    <Image Include="small.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="..\.editorconfig" />
     <None Include="..\README.md" />
-    <None Include="MyShader.fxh">
-      <FileType>Document</FileType>
-    </None>
+    <None Include="doc\PracticeD3D11.md" />
+    <None Include="fx\MyShader.fxh" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="MyShader_PS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">PS_main</EntryPointName>
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">PS_main</EntryPointName>
-    </FxCompile>
-    <FxCompile Include="MyShader_VS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VS_main</EntryPointName>
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">VS_main</EntryPointName>
-    </FxCompile>
+    <FxCompile Include="fx\MyShader.fx" />
+    <FxCompile Include="fx\MyShader_PS.hlsl" />
+    <FxCompile Include="fx\MyShader_VS.hlsl" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="code_backup.cpp" />
+    <Image Include="res\PracticeDirect3D11.ico" />
+    <Image Include="res\small.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="res\PracticeDirect3D11.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\CameraObject.cpp" />
+    <ClCompile Include="src\D3DApp.cpp" />
+    <ClCompile Include="src\GameTimer.cpp" />
+    <ClCompile Include="src\Mesh.cpp" />
+    <ClCompile Include="src\MeshRendererObject.cpp" />
+    <ClCompile Include="src\ObjectManager.cpp" />
+    <ClCompile Include="src\PCH.cpp" />
+    <ClCompile Include="src\PracticeD3D11.cpp" />
+    <ClCompile Include="src\Utility.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\CameraObject.h" />
+    <ClInclude Include="src\D3DApp.h" />
+    <ClInclude Include="src\GameTimer.h" />
+    <ClInclude Include="src\Mesh.h" />
+    <ClInclude Include="src\MeshRendererObject.h" />
+    <ClInclude Include="src\ObjectManager.h" />
+    <ClInclude Include="src\PCH.h" />
+    <ClInclude Include="src\PracticeD3D11.h" />
+    <ClInclude Include="src\Resource.h" />
+    <ClInclude Include="src\targetver.h" />
+    <ClInclude Include="src\Utility.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
