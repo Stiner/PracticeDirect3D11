@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #define USE_SIMPLE_VERTEX 1
 
@@ -23,12 +23,12 @@ public:
     void Load();
     void Release() noexcept;
 
-    inline int32 GetVertexSize() const noexcept
+    inline uint32 GetVertexSize() const noexcept
     {
         return sizeof(Vertex);
     }
 
-    inline int32 GetNumDescVertex() const noexcept
+    inline uint32 GetNumDescVertex() const noexcept
     {
         return _NumDescVertex;
     }
@@ -38,7 +38,7 @@ public:
         return _DescVertex;
     }
 
-    inline int32 GetNumVertex() const noexcept
+    inline uint32 GetNumVertex() const noexcept
     {
         return _NumVertex;
     }
@@ -48,12 +48,12 @@ public:
         return _Vertices;
     }
 
-    inline int32 GetIndexSize() const noexcept
+    inline uint32 GetIndexSize() const noexcept
     {
         return sizeof(uint32);
     }
 
-    inline int32 GetNumIndices() const noexcept
+    inline uint32 GetNumIndices() const noexcept
     {
         return _NumIndices;
     }
@@ -64,12 +64,12 @@ public:
     }
 
 protected:
-    int32 _NumDescVertex = 0;
+    uint32 _NumDescVertex = 0;
     D3D11_INPUT_ELEMENT_DESC* _DescVertex = nullptr;
 
-    int32 _NumVertex = 0;
+    uint32 _NumVertex = 0;
     Vertex* _Vertices = nullptr;
 
-    int32 _NumIndices = 0;
+    uint32 _NumIndices = 0;
     uint32* _Indices = nullptr;
 };

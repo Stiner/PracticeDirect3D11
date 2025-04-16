@@ -1,4 +1,4 @@
-// Practice D3D11
+﻿// Practice D3D11
 
 #include "PCH.h"
 #include "Utility.h"

@@ -5,8 +5,6 @@ struct VertexInput
 {
     float3 Position : POSITION;
     float4 Color : COLOR;
-    //float2 TexCoord0 : TEXCOORD0;
-    //float2 TexCorrd1 : TEXCOORD1;
 };
 
 struct VertexOutput
@@ -19,23 +17,6 @@ cbuffer cbPerObject
 {
     float4x4 gMatWorldViewProj;
 };
-
-//cbuffer cbPerFrame
-//{
-//    float4 gLightDirection;
-//    float4 gLightColor;
-//    float4 gAmbientColor;
-//};
-
-//cbuffer cbRarely
-//{
-//    float4 gFogColor;
-//    float gFogStart;
-//    float gFogEnd;
-//};
-
-//sampler2D gSamplerDiffuse;
-//sampler2D gSamplerNormal;
 
 VertexOutput VS_main(VertexInput i)
 {
@@ -54,5 +35,4 @@ VertexOutput VS_main(VertexInput i)
 float4 PS_main(VertexOutput i) : SV_Target
 {
     return i.Color;
-    //return i.Color * tex2D(gSamplerDiffuse, i.TexCoord0);
 }

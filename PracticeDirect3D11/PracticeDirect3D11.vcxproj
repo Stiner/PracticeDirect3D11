@@ -55,8 +55,9 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeaderFile>PCH.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>PCH.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -81,8 +82,9 @@ xcopy /y $(ProjectDir)*.hlsl $(TargetDir)</Command>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeaderFile>PCH.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>PCH.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -103,12 +105,23 @@ xcopy /y $(ProjectDir)*.hlsl $(TargetDir)</Command>
     <None Include="..\.editorconfig" />
     <None Include="..\README.md" />
     <None Include="doc\PracticeD3D11.md" />
-    <None Include="fx\MyShader.fxh" />
+    <None Include="fx\Unlit.fx" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="fx\MyShader.fx" />
-    <FxCompile Include="fx\MyShader_PS.hlsl" />
-    <FxCompile Include="fx\MyShader_VS.hlsl" />
+    <FxCompile Include="fx\Unlit_PS.hlsl">
+      <FileType>Document</FileType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">PS_main</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">PS_main</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="fx\Unlit_VS.hlsl">
+      <FileType>Document</FileType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VS_main</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">VS_main</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\PracticeDirect3D11.ico" />
@@ -124,11 +137,16 @@ xcopy /y $(ProjectDir)*.hlsl $(TargetDir)</Command>
     <ClCompile Include="src\Mesh.cpp" />
     <ClCompile Include="src\MeshRendererObject.cpp" />
     <ClCompile Include="src\ObjectManager.cpp" />
-    <ClCompile Include="src\PCH.cpp" />
+    <ClCompile Include="src\PCH.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="src\PracticeD3D11.cpp" />
     <ClCompile Include="src\Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="res\Resource.h" />
+    <ClInclude Include="res\targetver.h" />
     <ClInclude Include="src\CameraObject.h" />
     <ClInclude Include="src\D3DApp.h" />
     <ClInclude Include="src\GameTimer.h" />
@@ -137,8 +155,6 @@ xcopy /y $(ProjectDir)*.hlsl $(TargetDir)</Command>
     <ClInclude Include="src\ObjectManager.h" />
     <ClInclude Include="src\PCH.h" />
     <ClInclude Include="src\PracticeD3D11.h" />
-    <ClInclude Include="src\Resource.h" />
-    <ClInclude Include="src\targetver.h" />
     <ClInclude Include="src\Utility.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -1,9 +1,9 @@
-// PracticeD3D11
+﻿// PracticeD3D11
 
 #include "PCH.h"
 #include "D3DApp.h"
 
-#include "Resource.h"
+#include "res/Resource.h"
 #include <sstream>
 
 namespace
@@ -98,8 +98,6 @@ bool CD3D11App::Initialize()
 
 void CD3D11App::Release()
 {
-    COM_RELEASE(_D3DRasterizerState);
-
     COM_RELEASE(_D3DDepthStencilView);
     COM_RELEASE(_D3DDepthStencilBuffer);
     COM_RELEASE(_D3DRenderTargetView);
@@ -194,9 +192,6 @@ void CD3D11App::Draw()
     _D3DDeviceContext->ClearRenderTargetView(_D3DRenderTargetView, _ClearColor);
     assert(_D3DDepthStencilView);
     _D3DDeviceContext->ClearDepthStencilView(_D3DDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
-
-    assert(_D3DRasterizerState);
-    _D3DDeviceContext->RSSetState(_D3DRasterizerState);
 
     DrawScene();
 

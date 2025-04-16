@@ -1,4 +1,4 @@
-// PracticeD3D11
+﻿// PracticeD3D11
 
 #include "PCH.h"
 #include "MeshRendererObject.h"
@@ -118,9 +118,9 @@ void MeshRendererObject::InitVertexShader(ID3D11Device* D3DDevice)
     HRESULT hr = S_OK;
 
     ID3DBlob* VertexShaderBlob = nullptr;
-    if (FAILED(Utility::ReadFileToBlob(TEXT("MyShader_VS.cso"), &VertexShaderBlob)))
+    if (FAILED(Utility::ReadFileToBlob(TEXT("Unlit_VS.cso"), &VertexShaderBlob)))
     {
-        HRESULT hr = Utility::CompileShaderFromFile(TEXT("MyShader_VS.hlsl"), "VS_main", "vs_5_0", &VertexShaderBlob);
+        HRESULT hr = Utility::CompileShaderFromFile(TEXT("Unlit_VS.hlsl"), "VS_main", "vs_5_0", &VertexShaderBlob);
         assert(SUCCEEDED(hr));
     }
 
@@ -154,9 +154,9 @@ void MeshRendererObject::InitPixelShader(ID3D11Device* D3DDevice)
     HRESULT hr = S_OK;
 
     ID3DBlob* PixelShaderBlob = nullptr;
-    if (FAILED(Utility::ReadFileToBlob(TEXT("MyShader_PS.cso"), &PixelShaderBlob)))
+    if (FAILED(Utility::ReadFileToBlob(TEXT("Unlit_PS.cso"), &PixelShaderBlob)))
     {
-        hr = Utility::CompileShaderFromFile(TEXT("MyShader_PS.hlsl"), "PS_main", "ps_5_0", &PixelShaderBlob);
+        hr = Utility::CompileShaderFromFile(TEXT("Unlit_PS.hlsl"), "PS_main", "ps_5_0", &PixelShaderBlob);
         assert(SUCCEEDED(hr));
     }
 

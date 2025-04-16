@@ -21,23 +21,12 @@
   <ItemGroup>
     <None Include="..\README.md" />
     <None Include="..\.editorconfig" />
-    <None Include="fx\MyShader.fxh">
-      <Filter>fx</Filter>
-    </None>
     <None Include="doc\PracticeD3D11.md">
       <Filter>doc</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="fx\MyShader_VS.hlsl">
+    <None Include="fx\Unlit.fx">
       <Filter>fx</Filter>
-    </FxCompile>
-    <FxCompile Include="fx\MyShader.fx">
-      <Filter>fx</Filter>
-    </FxCompile>
-    <FxCompile Include="fx\MyShader_PS.hlsl">
-      <Filter>fx</Filter>
-    </FxCompile>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\PracticeDirect3D11.ico">
@@ -71,13 +60,13 @@
     <ClCompile Include="src\ObjectManager.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\PCH.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\PracticeD3D11.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Utility.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PCH.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -100,20 +89,28 @@
     <ClInclude Include="src\ObjectManager.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\PCH.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\PracticeD3D11.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Resource.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\targetver.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Utility.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="res\Resource.h">
+      <Filter>res</Filter>
+    </ClInclude>
+    <ClInclude Include="res\targetver.h">
+      <Filter>res</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PCH.h">
+      <Filter>src</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="fx\Unlit_PS.hlsl">
+      <Filter>fx</Filter>
+    </FxCompile>
+    <FxCompile Include="fx\Unlit_VS.hlsl">
+      <Filter>fx</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
