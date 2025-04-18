@@ -16,8 +16,7 @@ public:
     void Release();
 
     void SetPosition(float x, float y, float z) noexcept;
-    void SetRotationDegree(float roll, float pitch, float yaw);
-    void SetRotationRadian(float roll, float pitch, float yaw);
+    void SetRotation(float roll, float pitch, float yaw);
 
     void SetFov(float fov) noexcept;
     void SetAspectRatio(float aspectRatio) noexcept;

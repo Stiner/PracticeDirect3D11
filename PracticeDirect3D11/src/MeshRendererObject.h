@@ -53,5 +53,4 @@ protected:
     ID3D11Buffer* _D3DBufferVertex      = nullptr;
     ID3D11Buffer* _D3DBufferIndex       = nullptr;
     ID3D11Buffer* _D3DBufferMatWorld    = nullptr;
-    ID3D11Buffer* _D3DBufferMatViewProj = nullptr;
 };

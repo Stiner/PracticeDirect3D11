@@ -87,53 +87,53 @@ void MeshRendererObject::CreateBuffer(ID3D11Device* D3DDevice)
 {
     HRESULT hr = S_OK;
 
-    D3D11_BUFFER_DESC descVertexBuffer = {};
-    descVertexBuffer.Usage = D3D11_USAGE_DEFAULT;
-    descVertexBuffer.ByteWidth = _Mesh->GetVertexSize() * _Mesh->GetNumVertex();
-    descVertexBuffer.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-    descVertexBuffer.CPUAccessFlags = (D3D11_CPU_ACCESS_FLAG)0;
-    descVertexBuffer.MiscFlags = (D3D11_RESOURCE_MISC_FLAG)0;
-    descVertexBuffer.StructureByteStride = 0;
+    D3D11_BUFFER_DESC descBufferVertex = {};
+    descBufferVertex.Usage               = D3D11_USAGE_DEFAULT;
+    descBufferVertex.ByteWidth           = _Mesh->GetVertexSize() * _Mesh->GetNumVertex();
+    descBufferVertex.BindFlags           = D3D11_BIND_VERTEX_BUFFER;
+    descBufferVertex.CPUAccessFlags      = (D3D11_CPU_ACCESS_FLAG)0;
+    descBufferVertex.MiscFlags           = (D3D11_RESOURCE_MISC_FLAG)0;
+    descBufferVertex.StructureByteStride = 0;
 
-    D3D11_SUBRESOURCE_DATA descVertexSubResData = {};
-    descVertexSubResData.pSysMem = _Mesh->GetVertices();
-    descVertexSubResData.SysMemPitch = 0;
-    descVertexSubResData.SysMemSlicePitch = 0;
+    D3D11_SUBRESOURCE_DATA descSubResDataVertex = {};
+    descSubResDataVertex.pSysMem          = _Mesh->GetVertices();
+    descSubResDataVertex.SysMemPitch      = 0;
+    descSubResDataVertex.SysMemSlicePitch = 0;
 
-    hr = D3DDevice->CreateBuffer(&descVertexBuffer, &descVertexSubResData, &_D3DBufferVertex);
+    hr = D3DDevice->CreateBuffer(&descBufferVertex, &descSubResDataVertex, &_D3DBufferVertex);
     assert(SUCCEEDED(hr));
 
-    D3D11_BUFFER_DESC descIndexBuffer = {};
-    descIndexBuffer.Usage = D3D11_USAGE_DEFAULT;
-    descIndexBuffer.ByteWidth = _Mesh->GetIndexSize() * _Mesh->GetNumIndices();
-    descIndexBuffer.BindFlags = D3D11_BIND_INDEX_BUFFER;
-    descIndexBuffer.CPUAccessFlags = (D3D11_CPU_ACCESS_FLAG)0;
-    descIndexBuffer.MiscFlags = (D3D11_RESOURCE_MISC_FLAG)0;
-    descIndexBuffer.StructureByteStride = 0;
+    D3D11_BUFFER_DESC descBufferIndex = {};
+    descBufferIndex.Usage               = D3D11_USAGE_DEFAULT;
+    descBufferIndex.ByteWidth           = _Mesh->GetIndexSize() * _Mesh->GetNumIndices();
+    descBufferIndex.BindFlags           = D3D11_BIND_INDEX_BUFFER;
+    descBufferIndex.CPUAccessFlags      = (D3D11_CPU_ACCESS_FLAG)0;
+    descBufferIndex.MiscFlags           = (D3D11_RESOURCE_MISC_FLAG)0;
+    descBufferIndex.StructureByteStride = 0;
 
-    D3D11_SUBRESOURCE_DATA descIndexSubResDataIndex = {};
-    descIndexSubResDataIndex.pSysMem = _Mesh->GetIndices();
-    descIndexSubResDataIndex.SysMemPitch = 0;
-    descIndexSubResDataIndex.SysMemSlicePitch = 0;
+    D3D11_SUBRESOURCE_DATA descSubResDataIndex = {};
+    descSubResDataIndex.pSysMem          = _Mesh->GetIndices();
+    descSubResDataIndex.SysMemPitch      = 0;
+    descSubResDataIndex.SysMemSlicePitch = 0;
 
-    hr = D3DDevice->CreateBuffer(&descIndexBuffer, &descIndexSubResDataIndex, &_D3DBufferIndex);
+    hr = D3DDevice->CreateBuffer(&descBufferIndex, &descSubResDataIndex, &_D3DBufferIndex);
     assert(SUCCEEDED(hr));
 
 
-    D3D11_BUFFER_DESC descConstantBuffer = {};
-    descConstantBuffer.Usage = D3D11_USAGE_DEFAULT;
-    descConstantBuffer.ByteWidth = sizeof(DirectX::XMMATRIX);
-    descConstantBuffer.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-    descConstantBuffer.CPUAccessFlags = (D3D11_CPU_ACCESS_FLAG)0;
-    descConstantBuffer.MiscFlags = (D3D11_RESOURCE_MISC_FLAG)0;
-    descConstantBuffer.StructureByteStride = 0;
+    D3D11_BUFFER_DESC descBufferMatWorld = {};
+    descBufferMatWorld.Usage               = D3D11_USAGE_DEFAULT;
+    descBufferMatWorld.ByteWidth           = sizeof(DirectX::XMMATRIX);
+    descBufferMatWorld.BindFlags           = D3D11_BIND_CONSTANT_BUFFER;
+    descBufferMatWorld.CPUAccessFlags      = (D3D11_CPU_ACCESS_FLAG)0;
+    descBufferMatWorld.MiscFlags           = (D3D11_RESOURCE_MISC_FLAG)0;
+    descBufferMatWorld.StructureByteStride = 0;
 
-    D3D11_SUBRESOURCE_DATA descConstantSubResData = {};
-    descConstantSubResData.pSysMem = &_matWorld;
-    descConstantSubResData.SysMemPitch = 0;
-    descConstantSubResData.SysMemSlicePitch = 0;
+    D3D11_SUBRESOURCE_DATA descSubResDataMatWorld = {};
+    descSubResDataMatWorld.pSysMem          = &_matWorld;
+    descSubResDataMatWorld.SysMemPitch      = 0;
+    descSubResDataMatWorld.SysMemSlicePitch = 0;
 
-    hr = D3DDevice->CreateBuffer(&descConstantBuffer, &descConstantSubResData, &_D3DBufferMatWorld);
+    hr = D3DDevice->CreateBuffer(&descBufferMatWorld, &descSubResDataMatWorld, &_D3DBufferMatWorld);
     assert(SUCCEEDED(hr));
 }
 
@@ -142,15 +142,15 @@ void MeshRendererObject::CreateRasterizerState(ID3D11Device* D3DDevice)
     HRESULT hr = S_OK;
 
     D3D11_RASTERIZER_DESC descRasterizer = {};
-    descRasterizer.FillMode = D3D11_FILL_SOLID;
-    descRasterizer.CullMode = D3D11_CULL_BACK;
+    descRasterizer.FillMode              = D3D11_FILL_SOLID;
+    descRasterizer.CullMode              = D3D11_CULL_NONE;
     descRasterizer.FrontCounterClockwise = false;
-    descRasterizer.DepthBias = D3D11_DEFAULT_DEPTH_BIAS;
-    descRasterizer.DepthBiasClamp = D3D11_DEFAULT_DEPTH_BIAS_CLAMP;
-    descRasterizer.SlopeScaledDepthBias = D3D11_DEFAULT_SLOPE_SCALED_DEPTH_BIAS;
-    descRasterizer.DepthClipEnable = true;
-    descRasterizer.ScissorEnable = false;
-    descRasterizer.MultisampleEnable = false;
+    descRasterizer.DepthBias             = D3D11_DEFAULT_DEPTH_BIAS;
+    descRasterizer.DepthBiasClamp        = D3D11_DEFAULT_DEPTH_BIAS_CLAMP;
+    descRasterizer.SlopeScaledDepthBias  = D3D11_DEFAULT_SLOPE_SCALED_DEPTH_BIAS;
+    descRasterizer.DepthClipEnable       = true;
+    descRasterizer.ScissorEnable         = false;
+    descRasterizer.MultisampleEnable     = false;
     descRasterizer.AntialiasedLineEnable = false;
 
     hr = D3DDevice->CreateRasterizerState(&descRasterizer, &_D3DRasterizerState);
@@ -173,6 +173,11 @@ void MeshRendererObject::Draw(ID3D11DeviceContext* D3DDeviceContext) const
     if (_Mesh == nullptr || _Mesh->GetNumVertex() == 0)
         return;
 
+    D3DDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+    assert(_D3DInputLayout);
+    D3DDeviceContext->IASetInputLayout(_D3DInputLayout);
+
     uint32 NumBuffers = 1;
     uint32 VertexBufferStrides[1] = { _Mesh->GetVertexSize() };
     uint32 VertexBufferOffsets[1] = { 0 };
@@ -181,9 +186,6 @@ void MeshRendererObject::Draw(ID3D11DeviceContext* D3DDeviceContext) const
 
     assert(_D3DBufferIndex);
     D3DDeviceContext->IASetIndexBuffer(_D3DBufferIndex, DXGI_FORMAT_R32_UINT, 0);
-
-    assert(_D3DInputLayout);
-    D3DDeviceContext->IASetInputLayout(_D3DInputLayout);
 
     assert(_D3DVertexShader);
     D3DDeviceContext->VSSetShader(_D3DVertexShader, nullptr, 0);
@@ -211,7 +213,6 @@ void MeshRendererObject::Release()
     COM_RELEASE(_D3DBufferVertex);
     COM_RELEASE(_D3DBufferIndex);
     COM_RELEASE(_D3DBufferMatWorld);
-    COM_RELEASE(_D3DBufferMatViewProj);
 
     _Mesh->Release();
     MEM_DELETE(_Mesh);

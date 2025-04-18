@@ -103,8 +103,8 @@ void CD3D11App::Release()
     COM_RELEASE(_D3DRenderTargetView);
     COM_RELEASE(_DXGISwapChain1);
     COM_RELEASE(_DXGISwapChain);
-    _D3DDeviceContext1->ClearState(); COM_RELEASE(_D3DDeviceContext1);
-    _D3DDeviceContext->ClearState(); COM_RELEASE(_D3DDeviceContext);
+    COM_RELEASE(_D3DDeviceContext1);
+    COM_RELEASE(_D3DDeviceContext);
     COM_RELEASE(_D3DDevice1);
     COM_RELEASE(_D3DDevice);
 }
