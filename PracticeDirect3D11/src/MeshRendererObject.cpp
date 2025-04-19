@@ -7,10 +7,10 @@
 #include "Utility.h"
 
 MeshRendererObject::MeshRendererObject()
-    : _Position({ 0, 0, 0, 0 })
-    , _Rotation({ 0, 0, 0, 0 })
-    , _Scale({ 0, 0, 0, 0 })
-    , _matWorld(XMMatrixIdentity())
+    : _Position({ 0, 0, 0, 1 })
+    , _Rotation({ 0, 0, 0, 1 })
+    , _Scale({ 1, 1, 1, 1 })
+    , _MatWorld(XMMatrixIdentity())
 {
 }
 
@@ -119,7 +119,6 @@ void MeshRendererObject::CreateBuffer(ID3D11Device* D3DDevice)
     hr = D3DDevice->CreateBuffer(&descBufferIndex, &descSubResDataIndex, &_D3DBufferIndex);
     assert(SUCCEEDED(hr));
 
-
     D3D11_BUFFER_DESC descBufferMatWorld = {};
     descBufferMatWorld.Usage               = D3D11_USAGE_DEFAULT;
     descBufferMatWorld.ByteWidth           = sizeof(DirectX::XMMATRIX);
@@ -129,7 +128,7 @@ void MeshRendererObject::CreateBuffer(ID3D11Device* D3DDevice)
     descBufferMatWorld.StructureByteStride = 0;
 
     D3D11_SUBRESOURCE_DATA descSubResDataMatWorld = {};
-    descSubResDataMatWorld.pSysMem          = &_matWorld;
+    descSubResDataMatWorld.pSysMem          = &_MatWorld;
     descSubResDataMatWorld.SysMemPitch      = 0;
     descSubResDataMatWorld.SysMemSlicePitch = 0;
 
@@ -143,7 +142,7 @@ void MeshRendererObject::CreateRasterizerState(ID3D11Device* D3DDevice)
 
     D3D11_RASTERIZER_DESC descRasterizer = {};
     descRasterizer.FillMode              = D3D11_FILL_SOLID;
-    descRasterizer.CullMode              = D3D11_CULL_NONE;
+    descRasterizer.CullMode              = D3D11_CULL_BACK;
     descRasterizer.FrontCounterClockwise = false;
     descRasterizer.DepthBias             = D3D11_DEFAULT_DEPTH_BIAS;
     descRasterizer.DepthBiasClamp        = D3D11_DEFAULT_DEPTH_BIAS_CLAMP;
@@ -159,11 +158,26 @@ void MeshRendererObject::CreateRasterizerState(ID3D11Device* D3DDevice)
 
 void MeshRendererObject::Update(float DeltaTime)
 {
-    XMMATRIX matTranslate = XMMatrixTranslationFromVector(_Position);
-    XMMATRIX matRotation  = XMMatrixRotationRollPitchYawFromVector(_Rotation);
-    XMMATRIX matScale     = XMMatrixScalingFromVector(_Scale);
+    static float e = 0;
 
-    _matWorld = matScale * matRotation * matTranslate;
+    e += DeltaTime;
+    float x = sinf(e);
+
+    SetPosition(x, 0, 0);
+
+    UpdateMatrix();
+}
+
+void MeshRendererObject::UpdateMatrix()
+{
+    if (!_IsDirty)
+        return;
+
+    XMMATRIX matTranslate = XMMatrixTranslationFromVector(_Position);
+    XMMATRIX matRotation = XMMatrixRotationRollPitchYawFromVector(_Rotation);
+    XMMATRIX matScale = XMMatrixScalingFromVector(_Scale);
+
+    _MatWorld = matScale * matRotation * matTranslate;
 }
 
 void MeshRendererObject::Draw(ID3D11DeviceContext* D3DDeviceContext) const
@@ -191,7 +205,7 @@ void MeshRendererObject::Draw(ID3D11DeviceContext* D3DDeviceContext) const
     D3DDeviceContext->VSSetShader(_D3DVertexShader, nullptr, 0);
 
     assert(_D3DBufferMatWorld);
-    D3DDeviceContext->UpdateSubresource(_D3DBufferMatWorld, 0, nullptr, &_matWorld, 0, 0);
+    D3DDeviceContext->UpdateSubresource(_D3DBufferMatWorld, 0, nullptr, &_MatWorld, 0, 0);
     D3DDeviceContext->VSSetConstantBuffers(1, 1, &_D3DBufferMatWorld);
 
     assert(_D3DPixelShader);
@@ -220,31 +234,28 @@ void MeshRendererObject::Release()
 
 void MeshRendererObject::SetPosition(float x, float y, float z) noexcept
 {
-    _Position = { x, y, z };
+    _Position = { x, y, z, 1 };
+
+    _IsDirty = true;
 }
 
-void MeshRendererObject::SetRotationDegree(float roll, float pitch, float yaw)
-{
-    _Rotation = XMQuaternionRotationRollPitchYaw(
-        XMConvertToRadians(pitch),
-        XMConvertToRadians(yaw),
-        XMConvertToRadians(roll)
-    );
-}
-
-void MeshRendererObject::SetRotationRadian(float roll, float pitch, float yaw)
+void MeshRendererObject::SetRotation(float roll, float pitch, float yaw)
 {
     _Rotation = XMQuaternionRotationRollPitchYaw(roll, pitch, yaw);
+
+    _IsDirty = true;
 }
 
 void MeshRendererObject::SetScale(float x, float y, float z) noexcept
 {
     _Scale = { x, y, z };
+
+    _IsDirty = true;
 }
 
 const DirectX::XMMATRIX* MeshRendererObject::GetWorldMatrix() const noexcept
 {
-    return &_matWorld;
+    return &_MatWorld;
 }
 
 ID3D11InputLayout* MeshRendererObject::GetInputLayout() const noexcept

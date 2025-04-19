@@ -82,6 +82,8 @@ int CD3D11App::Run(const WCHAR* szCmdLine)
         }
     }
 
+    Release();
+
     return static_cast<int>(msg.wParam);
 }
 

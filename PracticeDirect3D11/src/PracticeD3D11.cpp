@@ -18,8 +18,8 @@ int APIENTRY wWinMain(_In_     HINSTANCE hInstance,
 CPracticeD3D11::CPracticeD3D11(HINSTANCE hAppInstance, const TCHAR* szAppName)
     : CD3D11App(hAppInstance, szAppName)
 {
-    _ClientWidth = 1024;
-    _ClientHeight = 768;
+    _ClientWidth = 1000;
+    _ClientHeight = 1000;
 }
 
 CPracticeD3D11::~CPracticeD3D11()
@@ -38,9 +38,12 @@ bool CPracticeD3D11::Initialize()
     _CameraObject.reset(new CameraObject());
 	_CameraObject->Initialize(_D3DDevice);
 	_CameraObject->SetAspectRatio(GetAspectRatio());
+    _CameraObject->SetPosition(0, 0, -5);
 
     _ObjectManager.reset(new ObjectManager());
-    _ObjectManager->Create(_D3DDevice);
+    MeshRendererObject* newObject = _ObjectManager->Create(_D3DDevice);
+    newObject->SetPosition(0.0f, 0.0f, 0.0f);
+    newObject->SetScale(0.25f, 0.25f, 0.25f);
 
     return r;
 }

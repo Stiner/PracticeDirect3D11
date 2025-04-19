@@ -77,7 +77,7 @@ void CameraObject::SetRotation(float roll, float pitch, float yaw)
 
 void CameraObject::SetFov(float fov) noexcept
 {
-    _fov = XMConvertToRadians(fov);
+    _fov = XMConvertToRadians(fov); // fov * (XM_PI / 180.0f);
 
     _IsDirty = true;
 }

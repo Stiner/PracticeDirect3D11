@@ -21,27 +21,27 @@ protected:
 
 public:
     void Update(float DeltaTime);
+    void UpdateMatrix();
     void Draw(ID3D11DeviceContext* D3DDeviceContext) const;
 
     void Release();
 
     void SetPosition(float x, float y, float z) noexcept;
-    void SetRotationDegree(float roll, float pitch, float yaw);
-    void SetRotationRadian(float roll, float pitch, float yaw);
+    void SetRotation(float roll, float pitch, float yaw);
     void SetScale(float x, float y, float z) noexcept;
 
     const DirectX::XMMATRIX* GetWorldMatrix() const noexcept;
 
     ID3D11InputLayout* GetInputLayout() const noexcept;
 
-
 protected:
     DirectX::XMVECTOR _Position;
     DirectX::XMVECTOR _Rotation;
     DirectX::XMVECTOR _Scale;
 
-    DirectX::XMMATRIX _matWorld;
-    DirectX::XMMATRIX _matViewProj;
+    bool _IsDirty = false;
+
+    DirectX::XMMATRIX _MatWorld;
 
     Mesh* _Mesh = nullptr;
 
@@ -50,7 +50,7 @@ protected:
     ID3D11PixelShader*     _D3DPixelShader     = nullptr;
     ID3D11RasterizerState* _D3DRasterizerState = nullptr;
 
-    ID3D11Buffer* _D3DBufferVertex      = nullptr;
-    ID3D11Buffer* _D3DBufferIndex       = nullptr;
-    ID3D11Buffer* _D3DBufferMatWorld    = nullptr;
+    ID3D11Buffer* _D3DBufferVertex   = nullptr;
+    ID3D11Buffer* _D3DBufferIndex    = nullptr;
+    ID3D11Buffer* _D3DBufferMatWorld = nullptr;
 };
