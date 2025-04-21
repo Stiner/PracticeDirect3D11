@@ -2,12 +2,15 @@
 
 #include "PCH.h"
 #include "CameraObject.h"
+#include "Utility.h"
 
 CameraObject::CameraObject()
-    : _Position({ 0, 0, 0, 1 })
-    , _Rotation({ 0, 0, 0, 1 })
+    : _Position({ 0, 0, 0, 0 })
+    , _Rotation({ 0, 0, 0, 0 })
     , _Forward({ 0, 0, 1, 1 })
     , _Up({ 0, 1, 0, 1 })
+    , _MatView(XMMatrixIdentity())
+    , _MatProj(XMMatrixIdentity())
     , _MatViewProj(XMMatrixIdentity())
 {
 }
@@ -16,7 +19,7 @@ void CameraObject::Initialize(ID3D11Device* D3DDevice)
 {
     SetFov(90.0f);
     SetAspectRatio(1);
-    SetNear(0.1f);
+    SetNear(1.0f);
     SetFar(1000.0f);
 
     SetPosition(0, 0, 0);
@@ -45,10 +48,15 @@ void CameraObject::Initialize(ID3D11Device* D3DDevice)
 
 void CameraObject::Update(float DeltaTime)
 {
+    //static float yaw = 0;
+    //yaw += XMConvertToRadians(30.0f) * DeltaTime;
+    //
+    //SetPosition(0, 0, 3);
+    //SetRotation(0, yaw, 0);
+
     if (_IsDirty)
     {
         UpdateMatrix();
-        _IsDirty = false;
     }
 }
 
@@ -68,12 +76,12 @@ void CameraObject::Release()
 
 void CameraObject::SetPosition(float x, float y, float z) noexcept
 {
-    _Position = { x, y, z };
+    _Position = XMVectorSet(x, y, z, 0);
 }
 
-void CameraObject::SetRotation(float roll, float pitch, float yaw)
+void CameraObject::SetRotation(float pitch, float yaw, float roll)
 {
-    _Rotation = XMQuaternionRotationRollPitchYaw(roll, pitch, yaw);
+    _Rotation = XMQuaternionRotationRollPitchYaw(pitch, yaw, roll);
 
 	_IsDirty = true;
 }
@@ -106,23 +114,15 @@ void CameraObject::SetFar(float farZ) noexcept
     _IsDirty = true;
 }
 
-const DirectX::XMMATRIX& CameraObject::GetMatrix() const noexcept
-{
-    return _MatViewProj;
-}
-
 void CameraObject::UpdateMatrix()
 {
-    XMVECTOR vecForward = { 0, 0, 1, 0 }, vecUp = { 0, 1, 0, 0 };
+    XMVECTOR lookDir = XMVector3Rotate(Const::Vector::BaseForward, _Rotation);
+    _Forward = XMVector3Normalize(lookDir);
 
-    vecForward = XMVector3Rotate(vecForward, _Rotation);
-    vecUp = XMVector3Rotate(vecUp, _Rotation);
+    XMVECTOR up = XMVector3Rotate(Const::Vector::BaseUp, _Rotation);
+    _Up = XMVector3Normalize(up);
 
-    vecForward = XMVector3Normalize(vecForward);
-    vecUp = XMVector3Normalize(vecUp);
-
-    XMMATRIX matView = XMMatrixLookToLH(_Position, vecForward, vecUp);
-    XMMATRIX matProjection = XMMatrixPerspectiveFovLH(_fov, _aspectRatio, _nearZ, _farZ);
-
-    _MatViewProj = matProjection * matView;
+    XMMATRIX matView = XMMatrixLookToLH(_Position, _Forward, _Up);
+    XMMATRIX matProj = XMMatrixPerspectiveFovLH(_fov, _aspectRatio, _nearZ, _farZ);
+    _MatViewProj = matView * matProj;
 }

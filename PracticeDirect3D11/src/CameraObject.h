@@ -16,25 +16,25 @@ public:
     void Release();
 
     void SetPosition(float x, float y, float z) noexcept;
-    void SetRotation(float roll, float pitch, float yaw);
+    void SetRotation(float pitch, float yaw, float roll);
 
     void SetFov(float fov) noexcept;
     void SetAspectRatio(float aspectRatio) noexcept;
     void SetNear(float nearZ) noexcept;
     void SetFar(float farZ) noexcept;
 
-    const DirectX::XMMATRIX& GetMatrix() const noexcept;
-
 protected:
     void UpdateMatrix();
 
 protected:
     DirectX::XMVECTOR _Position;
-    DirectX::XMVECTOR _Rotation;
+    DirectX::XMVECTOR _Rotation; // Quaternion
 
     DirectX::XMVECTOR _Forward;
     DirectX::XMVECTOR _Up;
 
+    DirectX::XMMATRIX _MatView;
+    DirectX::XMMATRIX _MatProj;
     DirectX::XMMATRIX _MatViewProj;
 
     float _fov         = 0;

@@ -7,9 +7,9 @@
 #include "Utility.h"
 
 MeshRendererObject::MeshRendererObject()
-    : _Position({ 0, 0, 0, 1 })
-    , _Rotation({ 0, 0, 0, 1 })
-    , _Scale({ 1, 1, 1, 1 })
+    : _Position({ 0, 0, 0, 0 })
+    , _Rotation({ 0, 0, 0, 0 })
+    , _Scale({ 1, 1, 1, 0 })
     , _MatWorld(XMMatrixIdentity())
 {
 }
@@ -30,9 +30,9 @@ void MeshRendererObject::CreateVertexShader(ID3D11Device* D3DDevice)
     HRESULT hr = S_OK;
 
     ID3DBlob* VertexShaderBlob = nullptr;
-    if (FAILED(Utility::ReadFileToBlob(TEXT("Unlit_VS.cso"), &VertexShaderBlob)))
+    if (FAILED(Shader::ReadFileToBlob(TEXT("Unlit_VS.cso"), &VertexShaderBlob)))
     {
-        HRESULT hr = Utility::CompileShaderFromFile(TEXT("Unlit_VS.hlsl"), "VS_main", "vs_5_0", &VertexShaderBlob);
+        HRESULT hr = Shader::CompileShaderFromFile(TEXT("Unlit_VS.hlsl"), "VS_main", "vs_5_0", &VertexShaderBlob);
         assert(SUCCEEDED(hr));
     }
 
@@ -66,9 +66,9 @@ void MeshRendererObject::CreatePixelShader(ID3D11Device* D3DDevice)
     HRESULT hr = S_OK;
 
     ID3DBlob* PixelShaderBlob = nullptr;
-    if (FAILED(Utility::ReadFileToBlob(TEXT("Unlit_PS.cso"), &PixelShaderBlob)))
+    if (FAILED(Shader::ReadFileToBlob(TEXT("Unlit_PS.cso"), &PixelShaderBlob)))
     {
-        hr = Utility::CompileShaderFromFile(TEXT("Unlit_PS.hlsl"), "PS_main", "ps_5_0", &PixelShaderBlob);
+        hr = Shader::CompileShaderFromFile(TEXT("Unlit_PS.hlsl"), "PS_main", "ps_5_0", &PixelShaderBlob);
         assert(SUCCEEDED(hr));
     }
 
@@ -158,23 +158,21 @@ void MeshRendererObject::CreateRasterizerState(ID3D11Device* D3DDevice)
 
 void MeshRendererObject::Update(float DeltaTime)
 {
-    static float e = 0;
+    static float angle = 0;
+    angle += XMConvertToRadians(30.f) * DeltaTime;
 
-    e += DeltaTime;
-    float x = sinf(e);
+    SetRotation(angle, angle, 0);
 
-    SetPosition(x, 0, 0);
-
-    UpdateMatrix();
+    if (_IsDirty)
+    {
+        UpdateMatrix();
+    }
 }
 
 void MeshRendererObject::UpdateMatrix()
 {
-    if (!_IsDirty)
-        return;
-
     XMMATRIX matTranslate = XMMatrixTranslationFromVector(_Position);
-    XMMATRIX matRotation = XMMatrixRotationRollPitchYawFromVector(_Rotation);
+    XMMATRIX matRotation = XMMatrixRotationQuaternion(_Rotation);
     XMMATRIX matScale = XMMatrixScalingFromVector(_Scale);
 
     _MatWorld = matScale * matRotation * matTranslate;
@@ -237,21 +235,21 @@ void MeshRendererObject::Release()
 
 void MeshRendererObject::SetPosition(float x, float y, float z) noexcept
 {
-    _Position = { x, y, z, 1 };
+    _Position = XMVectorSet(x, y, z, 0);
 
     _IsDirty = true;
 }
 
-void MeshRendererObject::SetRotation(float roll, float pitch, float yaw)
+void MeshRendererObject::SetRotation(float pitch, float yaw, float roll)
 {
-    _Rotation = XMQuaternionRotationRollPitchYaw(roll, pitch, yaw);
+    _Rotation = XMQuaternionRotationRollPitchYaw(pitch, yaw, roll);
 
     _IsDirty = true;
 }
 
 void MeshRendererObject::SetScale(float x, float y, float z) noexcept
 {
-    _Scale = { x, y, z };
+    _Scale = XMVectorSet(x, y, z, 0);
 
     _IsDirty = true;
 }

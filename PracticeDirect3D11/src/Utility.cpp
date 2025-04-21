@@ -7,7 +7,7 @@
 
 #pragma comment(lib, "d3dcompiler.lib")
 
-namespace Utility
+namespace Shader
 {
     HRESULT ReadFileToBlob(const WCHAR* szFileName, ID3DBlob** ppBlobOut)
     {

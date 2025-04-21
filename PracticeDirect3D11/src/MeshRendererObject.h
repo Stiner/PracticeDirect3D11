@@ -27,7 +27,7 @@ public:
     void Release();
 
     void SetPosition(float x, float y, float z) noexcept;
-    void SetRotation(float roll, float pitch, float yaw);
+    void SetRotation(float pitch, float yaw, float roll);
     void SetScale(float x, float y, float z) noexcept;
 
     const DirectX::XMMATRIX* GetWorldMatrix() const noexcept;
@@ -36,7 +36,7 @@ public:
 
 protected:
     DirectX::XMVECTOR _Position;
-    DirectX::XMVECTOR _Rotation;
+    DirectX::XMVECTOR _Rotation; // Quaternion
     DirectX::XMVECTOR _Scale;
 
     bool _IsDirty = false;
