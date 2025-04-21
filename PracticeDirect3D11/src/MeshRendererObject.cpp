@@ -205,7 +205,10 @@ void MeshRendererObject::Draw(ID3D11DeviceContext* D3DDeviceContext) const
     D3DDeviceContext->VSSetShader(_D3DVertexShader, nullptr, 0);
 
     assert(_D3DBufferMatWorld);
-    D3DDeviceContext->UpdateSubresource(_D3DBufferMatWorld, 0, nullptr, &_MatWorld, 0, 0);
+    // 셰이더로 넘겨줄때는 전치해서 넘겨줘야 한다.
+    // DirectX::XMMATRIX는 열 우선 순서로 저장되고, 셰이더에서는 행 우선 순서로 저장되기 때문.
+    XMMATRIX matWorldTransposed = XMMatrixTranspose(_MatWorld);
+    D3DDeviceContext->UpdateSubresource(_D3DBufferMatWorld, 0, nullptr, &matWorldTransposed, 0, 0);
     D3DDeviceContext->VSSetConstantBuffers(1, 1, &_D3DBufferMatWorld);
 
     assert(_D3DPixelShader);

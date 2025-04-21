@@ -4,10 +4,10 @@
 #include "CameraObject.h"
 
 CameraObject::CameraObject()
-    : _Position({ 0, 0, 0, 0 })
-    , _Rotation({ 0, 0, 0, 0 })
-    , _Forward({ 0, 0, 1, 0 })
-    , _Up({ 0, 1, 0, 0 })
+    : _Position({ 0, 0, 0, 1 })
+    , _Rotation({ 0, 0, 0, 1 })
+    , _Forward({ 0, 0, 1, 1 })
+    , _Up({ 0, 1, 0, 1 })
     , _MatViewProj(XMMatrixIdentity())
 {
 }
@@ -19,7 +19,7 @@ void CameraObject::Initialize(ID3D11Device* D3DDevice)
     SetNear(0.1f);
     SetFar(1000.0f);
 
-    SetPosition(0, 0, -5);
+    SetPosition(0, 0, 0);
     SetRotation(0, 0, 0);
 
     UpdateMatrix();
@@ -54,7 +54,10 @@ void CameraObject::Update(float DeltaTime)
 
 void CameraObject::Draw(ID3D11DeviceContext* D3DDeviceContext)
 {
-    D3DDeviceContext->UpdateSubresource(_D3DBufferMatViewProj, 0, nullptr, &_MatViewProj, 0, 0);
+    // 셰이더로 넘겨줄때는 전치해서 넘겨줘야 한다.
+    // DirectX::XMMATRIX는 열 우선 순서로 저장되고, 셰이더에서는 행 우선 순서로 저장되기 때문.
+    XMMATRIX matViewProjTransposed = XMMatrixTranspose(_MatViewProj);
+    D3DDeviceContext->UpdateSubresource(_D3DBufferMatViewProj, 0, nullptr, &matViewProjTransposed, 0, 0);
     D3DDeviceContext->VSSetConstantBuffers(0, 1, &_D3DBufferMatViewProj);
 }
 

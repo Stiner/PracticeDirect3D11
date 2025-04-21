@@ -32,8 +32,9 @@ VertexOutput VS_main(VertexInput i)
 {
     VertexOutput o;
     // 동차 절단 공간으로 변환
-    //o.Position = float4(i.Position, 1.0f);
-    o.Position = mul(float4(i.Position, 1.0f), gMatWorld);// * gMatViewProj);
+    // HLSL에서의 벡터는 행 우선의 1x4 행렬로 표현되고, 열 우선인 4x4 행렬과 곱할 때는 변환행렬 앞에 있어야 함.
+    o.Position = mul(float4(i.Position, 1.0f), gMatWorld * gMatViewProj);
+
     // 정점 색은 그대로 픽셀 쉐이더로 전달
     o.Color = i.Color;
 

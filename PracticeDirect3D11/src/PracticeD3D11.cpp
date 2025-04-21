@@ -38,7 +38,7 @@ bool CPracticeD3D11::Initialize()
     _CameraObject.reset(new CameraObject());
 	_CameraObject->Initialize(_D3DDevice);
 	_CameraObject->SetAspectRatio(GetAspectRatio());
-    _CameraObject->SetPosition(0, 0, -5);
+    _CameraObject->SetPosition(0, 0, -1.f);
 
     _ObjectManager.reset(new ObjectManager());
     MeshRendererObject* newObject = _ObjectManager->Create(_D3DDevice);

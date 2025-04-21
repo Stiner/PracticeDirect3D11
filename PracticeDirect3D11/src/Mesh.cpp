@@ -12,15 +12,15 @@ void Mesh::Load()
         { "COLOR",    0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
     };
 
-    //*/----
+    /*/----
     // Quad
     _NumVertex = 4;
     _Vertices = new Vertex[_NumVertex]
     {
-        { XMFLOAT3(-1.0f, -1.0f, 0.0f), Utility::Colors::White   },
-        { XMFLOAT3(-1.0f,  1.0f, 0.0f), Utility::Colors::Black   },
-        { XMFLOAT3( 1.0f, -1.0f, 0.0f), Utility::Colors::Red     },
-        { XMFLOAT3( 1.0f,  1.0f, 0.0f), Utility::Colors::Green   },
+        { XMFLOAT3(-1.0f, -1.0f, 0.0f), Utility::Colors::White },
+        { XMFLOAT3(-1.0f,  1.0f, 0.0f), Utility::Colors::Black },
+        { XMFLOAT3( 1.0f, -1.0f, 0.0f), Utility::Colors::Red   },
+        { XMFLOAT3( 1.0f,  1.0f, 0.0f), Utility::Colors::Green },
     };
 
     _NumIndices = 6;
