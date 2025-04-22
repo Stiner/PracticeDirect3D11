@@ -92,7 +92,7 @@ bool CD3D11App::Initialize()
     if (!InitMainWindow())
         return false;
 
-    if (!InitDirect3D())
+    if (!InitDevice())
         return false;
 
     return true;
@@ -124,7 +124,6 @@ bool CD3D11App::OnResize()
     COM_RELEASE(_D3DDepthStencilBuffer);
 
     // D3DRenderTargetView 생성
-
     {
         hr = _DXGISwapChain->ResizeBuffers(1, _ClientWidth, _ClientHeight, DXGI_FORMAT_R8G8B8A8_UNORM, 0);
         if (FAILED(hr)) { assert(SUCCEEDED(hr)); return false; }
@@ -373,7 +372,7 @@ bool CD3D11App::InitMainWindow()
     return true;
 }
 
-bool CD3D11App::InitDirect3D()
+bool CD3D11App::InitDevice()
 {
     HRESULT hr = S_OK;
 
@@ -416,7 +415,6 @@ bool CD3D11App::InitDirect3D()
                 break;
         }
 
-        
         if (FAILED(hr)) { assert(SUCCEEDED(hr)); return false; }
 
         // DirectX 11.1 or later
@@ -458,7 +456,7 @@ bool CD3D11App::InitDirect3D()
 
         // D3D 버전에 맞춰 IDXGISwapChain 생성
         {
-            // D3D11.1 이상에서는 IDXGIFactory2 인터페이스를 사용하여 스왑 체인을 생성
+            // D3D11.1 에서는 IDXGIFactory2 인터페이스를 사용하여 스왑 체인을 생성
             IDXGIFactory2* pDXGIFactory2 = nullptr;
             hr = pDXGIFactory1->QueryInterface(__uuidof(IDXGIFactory2), reinterpret_cast<void**>(&pDXGIFactory2));
             if (SUCCEEDED(hr))
@@ -497,7 +495,7 @@ bool CD3D11App::InitDirect3D()
                 }
                 COM_RELEASE(pDXGIFactory2);
             }
-            // D3D11.0 이하에서는 IDXGIFactory1 인터페이스를 사용하여 스왑 체인을 생성
+            // D3D11.0 에서는 IDXGIFactory1 인터페이스를 사용하여 스왑 체인을 생성
             else
             {
                 DXGI_SWAP_CHAIN_DESC sd = {};

@@ -12,23 +12,6 @@ void Mesh::Load()
         { "COLOR",    0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
     };
 
-    /*/----
-    // Quad
-    _NumVertex = 4;
-    _Vertices = new Vertex[_NumVertex]
-    {
-        { XMFLOAT3(-1.0f, -1.0f, -1.0f), Utility::Colors::White },
-        { XMFLOAT3(-1.0f,  1.0f, -1.0f), Utility::Colors::Black },
-        { XMFLOAT3( 1.0f, -1.0f, -1.0f), Utility::Colors::Red   },
-        { XMFLOAT3( 1.0f,  1.0f, -1.0f), Utility::Colors::Green },
-    };
-
-    _NumIndices = 6;
-    _Indices = new uint32[_NumIndices]
-    {
-        0, 1, 2, 2, 1, 3,
-    };
-    /*/
     // Cube
     _NumVertex = 8;
     _Vertices = new Vertex[_NumVertex]
@@ -56,19 +39,13 @@ void Mesh::Load()
     {
         // FrontCounterClockwise = false
 
-        4, 6, 7, 7, 5, 4, // front
-
+        4, 6, 7, 7, 5, 4, // forward
         0, 1, 3, 3, 2, 0, // back
-
         0, 4, 5, 5, 1, 0, // left
-
         2, 3, 7, 7, 6, 2, // right
-
         1, 5, 7, 7, 3, 1, // up
-
         0, 2, 6, 6, 4, 0, // bottom
     };
-    //*/
 }
 
 void Mesh::Release() noexcept

@@ -38,11 +38,15 @@ bool CPracticeD3D11::Initialize()
     _CameraObject.reset(new CameraObject());
 	_CameraObject->Initialize(_D3DDevice);
 	_CameraObject->SetAspectRatio(GetAspectRatio());
-    _CameraObject->SetPosition(0, 0, 3.f);
-    _CameraObject->SetRotation(0, XMConvertToRadians(180), 0);
+    _CameraObject->SetPosition(0, 0, -5.f);
+    _CameraObject->SetRotation(0, 0, 0);
 
     _ObjectManager.reset(new ObjectManager());
-    MeshRendererObject* newObject = _ObjectManager->Create(_D3DDevice);
+    MeshRendererObject* newObject1 = _ObjectManager->Create(_D3DDevice);
+    newObject1->SetPosition(2, 0, 0);
+    MeshRendererObject* newObject2 = _ObjectManager->Create(_D3DDevice);
+    newObject2->SetPosition(-2, 0, 0);
+    newObject2->SetScale(.5f, .5f, .5f);
 
     return r;
 }

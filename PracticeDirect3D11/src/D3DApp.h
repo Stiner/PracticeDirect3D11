@@ -31,7 +31,7 @@ protected:
     virtual void OnMouseMove(WPARAM btnState, int x, int y) {}
 
     bool InitMainWindow();
-    bool InitDirect3D();
+    bool InitDevice();
 
     void CalculateFrameStats();
 
