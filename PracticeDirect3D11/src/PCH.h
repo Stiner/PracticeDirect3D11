@@ -7,11 +7,12 @@
 // C 런타임 헤더 파일
 #include <stdlib.h>
 #include <malloc.h>
-#include <memory.h>
 #include <tchar.h>
 // C++ 런타임 헤더 파일
 #include <iostream>
 #include <string>
+#include <vector>
+#include <memory>
 // Windows 헤더 파일
 #include <windows.h>
 // D3D 헤더 파일

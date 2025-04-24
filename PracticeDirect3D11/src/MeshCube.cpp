@@ -1,9 +1,7 @@
 ﻿#include "PCH.h"
-#include "Mesh.h"
+#include "MeshCube.h"
 
-#include "Utility.h"
-
-void Mesh::Load()
+void MeshCube::Initialize()
 {
     _NumDescVertex = 2;
     _DescVertex = new D3D11_INPUT_ELEMENT_DESC[_NumDescVertex]
@@ -12,8 +10,8 @@ void Mesh::Load()
         { "COLOR",    0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
     };
 
-    // Cube
     _NumVertex = 8;
+    _VertexSize = sizeof(Vertex);
     _Vertices = new Vertex[_NumVertex]
     {
         //                                  
@@ -24,17 +22,18 @@ void Mesh::Load()
         // (-z)  (-y)        | /     | /    
         //                   0-------2      
         //                                  
-        { XMFLOAT3(-1.0f, -1.0f, -1.0f), static_cast<XMFLOAT4>(DirectX::Colors::White  ) }, // 0
-        { XMFLOAT3(-1.0f,  1.0f, -1.0f), static_cast<XMFLOAT4>(DirectX::Colors::Black  ) }, // 1
-        { XMFLOAT3( 1.0f, -1.0f, -1.0f), static_cast<XMFLOAT4>(DirectX::Colors::Red    ) }, // 2
-        { XMFLOAT3( 1.0f,  1.0f, -1.0f), static_cast<XMFLOAT4>(DirectX::Colors::Green  ) }, // 3
-        { XMFLOAT3(-1.0f, -1.0f,  1.0f), static_cast<XMFLOAT4>(DirectX::Colors::Blue   ) }, // 4
-        { XMFLOAT3(-1.0f,  1.0f,  1.0f), static_cast<XMFLOAT4>(DirectX::Colors::Yellow ) }, // 5
-        { XMFLOAT3( 1.0f, -1.0f,  1.0f), static_cast<XMFLOAT4>(DirectX::Colors::Cyan   ) }, // 6
-        { XMFLOAT3( 1.0f,  1.0f,  1.0f), static_cast<XMFLOAT4>(DirectX::Colors::Magenta) }, // 7
+        { {-1.0f, -1.0f, -1.0f}, (XMFLOAT4)(DirectX::Colors::White)   }, // 0
+        { {-1.0f,  1.0f, -1.0f}, (XMFLOAT4)(DirectX::Colors::Black)   }, // 1
+        { { 1.0f, -1.0f, -1.0f}, (XMFLOAT4)(DirectX::Colors::Red)     }, // 2
+        { { 1.0f,  1.0f, -1.0f}, (XMFLOAT4)(DirectX::Colors::Green)   }, // 3
+        { {-1.0f, -1.0f,  1.0f}, (XMFLOAT4)(DirectX::Colors::Blue)    }, // 4
+        { {-1.0f,  1.0f,  1.0f}, (XMFLOAT4)(DirectX::Colors::Yellow)  }, // 5
+        { { 1.0f, -1.0f,  1.0f}, (XMFLOAT4)(DirectX::Colors::Cyan)    }, // 6
+        { { 1.0f,  1.0f,  1.0f}, (XMFLOAT4)(DirectX::Colors::Magenta) }, // 7
     };
 
     _NumIndices = 36;
+    _IndexSize = sizeof(uint32);
     _Indices = new uint32[_NumIndices]
     {
         // FrontCounterClockwise = false
@@ -48,8 +47,10 @@ void Mesh::Load()
     };
 }
 
-void Mesh::Release() noexcept
+void MeshCube::Release() noexcept
 {
+    _VertexSize = 0;
+
     MEM_DELETE(_DescVertex);
     _NumDescVertex = 0;
 

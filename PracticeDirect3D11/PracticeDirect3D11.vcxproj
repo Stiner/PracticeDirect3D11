@@ -141,12 +141,14 @@
     <ResourceCompile Include="res\PracticeDirect3D11.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Material.cpp" />
+    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="MeshCubeTex.cpp" />
     <ClCompile Include="src\CameraObject.cpp" />
     <ClCompile Include="src\D3DApp.cpp" />
     <ClCompile Include="src\GameTimer.cpp" />
-    <ClCompile Include="src\Mesh.cpp" />
+    <ClCompile Include="src\MeshCube.cpp" />
     <ClCompile Include="src\MeshRendererObject.cpp" />
-    <ClCompile Include="src\ObjectManager.cpp" />
     <ClCompile Include="src\PCH.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -155,14 +157,16 @@
     <ClCompile Include="src\Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Material.h" />
+    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="MeshCubeTex.h" />
     <ClInclude Include="res\Resource.h" />
     <ClInclude Include="res\targetver.h" />
     <ClInclude Include="src\CameraObject.h" />
     <ClInclude Include="src\D3DApp.h" />
     <ClInclude Include="src\GameTimer.h" />
-    <ClInclude Include="src\Mesh.h" />
+    <ClInclude Include="src\MeshCube.h" />
     <ClInclude Include="src\MeshRendererObject.h" />
-    <ClInclude Include="src\ObjectManager.h" />
     <ClInclude Include="src\PCH.h" />
     <ClInclude Include="src\PracticeD3D11.h" />
     <ClInclude Include="src\Utility.h" />

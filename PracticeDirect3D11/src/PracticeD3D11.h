@@ -4,7 +4,9 @@
 
 #include "D3DApp.h"
 
-class ObjectManager;
+class Mesh;
+class Material;
+class MeshRendererObject;
 class CameraObject;
 
 class CPracticeD3D11 : public CD3D11App
@@ -26,6 +28,9 @@ public:
     virtual void OnMouseMove(WPARAM btnState, int x, int y) override;
 
 protected:
-    std::unique_ptr<ObjectManager> _ObjectManager;
-    std::unique_ptr<CameraObject> _CameraObject;
+    std::vector<Mesh*> _ListMesh;
+    std::vector<Material*> _ListMaterial;
+    std::vector<MeshRendererObject*> _ListMeshRendererObject;
+
+    CameraObject* _CameraObject = nullptr;
 };

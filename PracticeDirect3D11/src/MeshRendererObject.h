@@ -3,6 +3,7 @@
 #pragma once
 
 class Mesh;
+class Material;
 
 class MeshRendererObject
 {
@@ -10,14 +11,15 @@ public:
     MeshRendererObject();
     virtual ~MeshRendererObject() = default;
 
-    void Initialize(ID3D11Device* D3DDevice);
+    void Initialize(ID3D11Device* D3DDevice, Mesh* SourceMesh, Material* SourceMaterial);
 
 protected:
-    virtual void CreateVertexShader(ID3D11Device* D3DDevice);
-    virtual void InitInputLayout(ID3D11Device* D3DDevice, ID3DBlob* VertexShaderBlob);
-    virtual void CreatePixelShader(ID3D11Device* D3DDevice);
-    virtual void CreateBuffer(ID3D11Device* D3DDevice);
-    virtual void CreateRasterizerState(ID3D11Device* D3DDevice);
+    void CreateVertexShader(ID3D11Device* D3DDevice);
+    void CreateInputLayout(ID3D11Device* D3DDevice, ID3DBlob* VertexShaderBlob);
+    void CreatePixelShader(ID3D11Device* D3DDevice);
+    void CreateRasterizerState(ID3D11Device* D3DDevice);
+    void CreateConstantBuffer(ID3D11Device* D3DDevice);
+    void CreateVertexIndexBuffer(ID3D11Device* D3DDevice);
 
 public:
     void Update(float DeltaTime);
@@ -44,6 +46,7 @@ protected:
     DirectX::XMMATRIX _MatWorld;
 
     Mesh* _Mesh = nullptr;
+    Material* _Material = nullptr;
 
     ID3D11InputLayout*     _D3DInputLayout     = nullptr;
     ID3D11VertexShader*    _D3DVertexShader    = nullptr;

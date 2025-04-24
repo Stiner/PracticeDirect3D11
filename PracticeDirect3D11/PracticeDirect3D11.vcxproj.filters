@@ -48,13 +48,10 @@
     <ClCompile Include="src\GameTimer.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Mesh.cpp">
+    <ClCompile Include="src\MeshCube.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\MeshRendererObject.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ObjectManager.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\PracticeD3D11.cpp">
@@ -64,6 +61,15 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\PCH.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshCubeTex.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -77,13 +83,10 @@
     <ClInclude Include="src\GameTimer.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Mesh.h">
+    <ClInclude Include="src\MeshCube.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\MeshRendererObject.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ObjectManager.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\PracticeD3D11.h">
@@ -99,6 +102,15 @@
       <Filter>res</Filter>
     </ClInclude>
     <ClInclude Include="src\PCH.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshCubeTex.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

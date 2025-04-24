@@ -4,8 +4,10 @@
 #include "PracticeD3D11.h"
 
 #include "MeshRendererObject.h"
-#include "ObjectManager.h"
 #include "CameraObject.h"
+#include "MeshCube.h"
+#include "MeshCubeTex.h"
+#include "Material.h"
 
 int APIENTRY wWinMain(_In_     HINSTANCE hInstance,
     _In_opt_ HINSTANCE hPrevInstance,
@@ -33,31 +35,72 @@ bool CPracticeD3D11::ProccessCmdLine(const TCHAR* szCmdLine)
 
 bool CPracticeD3D11::Initialize()
 {
-    bool r = __super::Initialize();
+    if (!__super::Initialize())
+        return false;
 
-    _CameraObject.reset(new CameraObject());
+    _CameraObject = new CameraObject();
 	_CameraObject->Initialize(_D3DDevice);
 	_CameraObject->SetAspectRatio(GetAspectRatio());
     _CameraObject->SetPosition(0, 0, -5.f);
     _CameraObject->SetRotation(0, 0, 0);
 
-    _ObjectManager.reset(new ObjectManager());
-    MeshRendererObject* newObject1 = _ObjectManager->Create(_D3DDevice);
-    newObject1->SetPosition(2, 0, 0);
-    MeshRendererObject* newObject2 = _ObjectManager->Create(_D3DDevice);
-    newObject2->SetPosition(-2, 0, 0);
-    newObject2->SetScale(.5f, .5f, .5f);
+    Mesh* newMesh = nullptr;
+    Material* newMaterial = nullptr;
+    MeshRendererObject* newObject = nullptr;
 
-    return r;
+    {
+        newMesh = new MeshCubeTex();
+        newMesh->Initialize();
+        _ListMesh.push_back(newMesh);
+
+        newMaterial = new Material();
+        newMaterial->Initialize();
+        _ListMaterial.push_back(newMaterial);
+
+        newObject = new MeshRendererObject();
+        newObject->Initialize(_D3DDevice, newMesh, newMaterial);
+        _ListMeshRendererObject.push_back(newObject);
+
+        newObject->SetPosition(2, 0, 0);
+    }
+    {
+        newMesh = new MeshCube();
+        newMesh->Initialize();
+        _ListMesh.push_back(newMesh);
+
+        newMaterial = new Material();
+        newMaterial->Initialize();
+        _ListMaterial.push_back(newMaterial);
+
+        newObject = new MeshRendererObject();
+        newObject->Initialize(_D3DDevice, newMesh, newMaterial);
+        _ListMeshRendererObject.push_back(newObject);
+
+        newObject->SetPosition(-2, 0, 0);
+        newObject->SetScale(.5f, .5f, .5f);
+    }
+
+    return true;
+}
+
+template<class T> void RemoveAll(std::vector<T*> list)
+{
+    for (T* e : list)
+    {
+        if (e != nullptr) e->Release();
+        MEM_DELETE(e);
+    }
+    list.clear();
 }
 
 void CPracticeD3D11::Release()
 {
-    _ObjectManager->RemoveAll();
-    _ObjectManager.release();
+    RemoveAll(_ListMesh);
+    RemoveAll(_ListMaterial);
+    RemoveAll(_ListMeshRendererObject);
 
     _CameraObject->Release();
-	_CameraObject.release();
+    MEM_DELETE(_CameraObject);
 
     __super::Release();
 }
@@ -71,9 +114,9 @@ void CPracticeD3D11::UpdateScene(float DeltaTime)
 {
     _CameraObject->Update(DeltaTime);
 
-    for (auto& Object : _ObjectManager->GetContainer())
+    for (MeshRendererObject* Object : _ListMeshRendererObject)
     {
-        Object->Update(DeltaTime);
+        if (Object != nullptr) Object->Update(DeltaTime);
     }
 }
 
@@ -81,9 +124,9 @@ void CPracticeD3D11::DrawScene()
 {
     _CameraObject->Draw(_D3DDeviceContext);
 
-    for (auto& Object : _ObjectManager->GetContainer())
+    for (MeshRendererObject* Object : _ListMeshRendererObject)
     {
-        Object->Draw(_D3DDeviceContext);
+        if (Object != nullptr) Object->Draw(_D3DDeviceContext);
     }
 }
 

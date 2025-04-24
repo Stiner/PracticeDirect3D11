@@ -4,6 +4,7 @@
 #include "MeshRendererObject.h"
 
 #include "Mesh.h"
+#include "Material.h"
 #include "Utility.h"
 
 MeshRendererObject::MeshRendererObject()
@@ -14,15 +15,19 @@ MeshRendererObject::MeshRendererObject()
 {
 }
 
-void MeshRendererObject::Initialize(ID3D11Device* D3DDevice)
+void MeshRendererObject::Initialize(ID3D11Device* D3DDevice, Mesh* SourceMesh, Material* SourceMaterial)
 {
-    _Mesh = new Mesh();
-    _Mesh->Load();
+    if (SourceMesh == nullptr)
+        return;
+
+    _Mesh = SourceMesh;
+    _Material = SourceMaterial;
 
     CreateVertexShader(D3DDevice);
     CreatePixelShader(D3DDevice);
-    CreateBuffer(D3DDevice);
 	CreateRasterizerState(D3DDevice);
+    CreateConstantBuffer(D3DDevice);
+    CreateVertexIndexBuffer(D3DDevice);
 }
 
 void MeshRendererObject::CreateVertexShader(ID3D11Device* D3DDevice)
@@ -43,12 +48,12 @@ void MeshRendererObject::CreateVertexShader(ID3D11Device* D3DDevice)
         &_D3DVertexShader
     );
 
-    InitInputLayout(D3DDevice, VertexShaderBlob);
+    CreateInputLayout(D3DDevice, VertexShaderBlob);
 
     COM_RELEASE(VertexShaderBlob);
 }
 
-void MeshRendererObject::InitInputLayout(ID3D11Device* D3DDevice, ID3DBlob* VertexShaderBlob)
+void MeshRendererObject::CreateInputLayout(ID3D11Device* D3DDevice, ID3DBlob* VertexShaderBlob)
 {
     HRESULT hr = S_OK;
 
@@ -83,59 +88,6 @@ void MeshRendererObject::CreatePixelShader(ID3D11Device* D3DDevice)
     COM_RELEASE(PixelShaderBlob);
 }
 
-void MeshRendererObject::CreateBuffer(ID3D11Device* D3DDevice)
-{
-    HRESULT hr = S_OK;
-
-    D3D11_BUFFER_DESC descBufferVertex = {};
-    descBufferVertex.Usage               = D3D11_USAGE_DEFAULT;
-    descBufferVertex.ByteWidth           = _Mesh->GetVertexSize() * _Mesh->GetNumVertex();
-    descBufferVertex.BindFlags           = D3D11_BIND_VERTEX_BUFFER;
-    descBufferVertex.CPUAccessFlags      = (D3D11_CPU_ACCESS_FLAG)0;
-    descBufferVertex.MiscFlags           = (D3D11_RESOURCE_MISC_FLAG)0;
-    descBufferVertex.StructureByteStride = 0;
-
-    D3D11_SUBRESOURCE_DATA descSubResDataVertex = {};
-    descSubResDataVertex.pSysMem          = _Mesh->GetVertices();
-    descSubResDataVertex.SysMemPitch      = 0;
-    descSubResDataVertex.SysMemSlicePitch = 0;
-
-    hr = D3DDevice->CreateBuffer(&descBufferVertex, &descSubResDataVertex, &_D3DBufferVertex);
-    assert(SUCCEEDED(hr));
-
-    D3D11_BUFFER_DESC descBufferIndex = {};
-    descBufferIndex.Usage               = D3D11_USAGE_DEFAULT;
-    descBufferIndex.ByteWidth           = _Mesh->GetIndexSize() * _Mesh->GetNumIndices();
-    descBufferIndex.BindFlags           = D3D11_BIND_INDEX_BUFFER;
-    descBufferIndex.CPUAccessFlags      = (D3D11_CPU_ACCESS_FLAG)0;
-    descBufferIndex.MiscFlags           = (D3D11_RESOURCE_MISC_FLAG)0;
-    descBufferIndex.StructureByteStride = 0;
-
-    D3D11_SUBRESOURCE_DATA descSubResDataIndex = {};
-    descSubResDataIndex.pSysMem          = _Mesh->GetIndices();
-    descSubResDataIndex.SysMemPitch      = 0;
-    descSubResDataIndex.SysMemSlicePitch = 0;
-
-    hr = D3DDevice->CreateBuffer(&descBufferIndex, &descSubResDataIndex, &_D3DBufferIndex);
-    assert(SUCCEEDED(hr));
-
-    D3D11_BUFFER_DESC descBufferMatWorld = {};
-    descBufferMatWorld.Usage               = D3D11_USAGE_DEFAULT;
-    descBufferMatWorld.ByteWidth           = sizeof(DirectX::XMMATRIX);
-    descBufferMatWorld.BindFlags           = D3D11_BIND_CONSTANT_BUFFER;
-    descBufferMatWorld.CPUAccessFlags      = (D3D11_CPU_ACCESS_FLAG)0;
-    descBufferMatWorld.MiscFlags           = (D3D11_RESOURCE_MISC_FLAG)0;
-    descBufferMatWorld.StructureByteStride = 0;
-
-    D3D11_SUBRESOURCE_DATA descSubResDataMatWorld = {};
-    descSubResDataMatWorld.pSysMem          = &_MatWorld;
-    descSubResDataMatWorld.SysMemPitch      = 0;
-    descSubResDataMatWorld.SysMemSlicePitch = 0;
-
-    hr = D3DDevice->CreateBuffer(&descBufferMatWorld, &descSubResDataMatWorld, &_D3DBufferMatWorld);
-    assert(SUCCEEDED(hr));
-}
-
 void MeshRendererObject::CreateRasterizerState(ID3D11Device* D3DDevice)
 {
     HRESULT hr = S_OK;
@@ -154,6 +106,68 @@ void MeshRendererObject::CreateRasterizerState(ID3D11Device* D3DDevice)
 
     hr = D3DDevice->CreateRasterizerState(&descRasterizer, &_D3DRasterizerState);
     assert(SUCCEEDED(hr));
+}
+
+void MeshRendererObject::CreateConstantBuffer(ID3D11Device* D3DDevice)
+{
+    HRESULT hr = S_OK;
+    D3D11_BUFFER_DESC descBuffer = {};
+    D3D11_SUBRESOURCE_DATA descSubResData = {};
+
+    descBuffer.Usage               = D3D11_USAGE_DEFAULT;
+    descBuffer.ByteWidth           = sizeof(DirectX::XMMATRIX);
+    descBuffer.BindFlags           = D3D11_BIND_CONSTANT_BUFFER;
+    descBuffer.CPUAccessFlags      = (D3D11_CPU_ACCESS_FLAG)0;
+    descBuffer.MiscFlags           = (D3D11_RESOURCE_MISC_FLAG)0;
+    descBuffer.StructureByteStride = 0;
+
+    descSubResData.pSysMem          = &_MatWorld;
+    descSubResData.SysMemPitch      = 0;
+    descSubResData.SysMemSlicePitch = 0;
+
+    hr = D3DDevice->CreateBuffer(&descBuffer, &descSubResData, &_D3DBufferMatWorld);
+    assert(SUCCEEDED(hr));
+}
+
+void MeshRendererObject::CreateVertexIndexBuffer(ID3D11Device* D3DDevice)
+{
+    HRESULT hr = S_OK;
+    D3D11_BUFFER_DESC descBuffer = {};
+    D3D11_SUBRESOURCE_DATA descSubResData = {};
+
+    {
+        descBuffer.Usage               = D3D11_USAGE_DEFAULT;
+        descBuffer.ByteWidth           = _Mesh->GetVertexSize() * _Mesh->GetNumVertex();
+        descBuffer.BindFlags           = D3D11_BIND_VERTEX_BUFFER;
+        descBuffer.CPUAccessFlags      = (D3D11_CPU_ACCESS_FLAG)0;
+        descBuffer.MiscFlags           = (D3D11_RESOURCE_MISC_FLAG)0;
+        descBuffer.StructureByteStride = 0;
+
+        descSubResData.pSysMem          = _Mesh->GetVertices();
+        descSubResData.SysMemPitch      = 0;
+        descSubResData.SysMemSlicePitch = 0;
+
+        hr = D3DDevice->CreateBuffer(&descBuffer, &descSubResData, &_D3DBufferVertex);
+        assert(SUCCEEDED(hr));
+    }
+
+    descBuffer = {}; descSubResData = {};
+
+    {
+        descBuffer.Usage               = D3D11_USAGE_DEFAULT;
+        descBuffer.ByteWidth           = _Mesh->GetIndexSize() * _Mesh->GetNumIndices();
+        descBuffer.BindFlags           = D3D11_BIND_INDEX_BUFFER;
+        descBuffer.CPUAccessFlags      = (D3D11_CPU_ACCESS_FLAG)0;
+        descBuffer.MiscFlags           = (D3D11_RESOURCE_MISC_FLAG)0;
+        descBuffer.StructureByteStride = 0;
+
+        descSubResData.pSysMem          = _Mesh->GetIndices();
+        descSubResData.SysMemPitch      = 0;
+        descSubResData.SysMemSlicePitch = 0;
+
+        hr = D3DDevice->CreateBuffer(&descBuffer, &descSubResData, &_D3DBufferIndex);
+        assert(SUCCEEDED(hr));
+    }
 }
 
 void MeshRendererObject::Update(float DeltaTime)
@@ -228,9 +242,6 @@ void MeshRendererObject::Release()
     COM_RELEASE(_D3DBufferVertex);
     COM_RELEASE(_D3DBufferIndex);
     COM_RELEASE(_D3DBufferMatWorld);
-
-    _Mesh->Release();
-    MEM_DELETE(_Mesh);
 }
 
 void MeshRendererObject::SetPosition(float x, float y, float z) noexcept
