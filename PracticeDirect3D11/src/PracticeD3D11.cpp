@@ -49,7 +49,7 @@ bool CPracticeD3D11::Initialize()
     MeshRendererObject* newObject = nullptr;
 
     {
-        newMesh = new MeshCubeTex();
+        newMesh = new MeshCube();
         newMesh->Initialize();
         _ListMesh.push_back(newMesh);
 
