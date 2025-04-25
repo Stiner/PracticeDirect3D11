@@ -1,10 +1,12 @@
-﻿#pragma once
+﻿// PracticeD3D11
 
-class Material
+#pragma once
+
+class CMaterial
 {
 public:
-    Material() = default;
-    virtual ~Material() = default;
+    CMaterial() = default;
+    virtual ~CMaterial() = default;
 
     void Initialize();
     void Release();
@@ -17,6 +19,11 @@ public:
     {
         return _PixelShaderBlob;
     }
+
+protected:
+    void CreateInputLayout();
+    void CreateVertexShader();
+    void CreatePixelShader();
 
 protected:
     ID3DBlob* _VertexShaderBlob = nullptr;

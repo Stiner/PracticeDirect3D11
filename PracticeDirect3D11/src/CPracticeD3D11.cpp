@@ -1,13 +1,13 @@
 ﻿// PracticeD3D11
 
 #include "PCH.h"
-#include "PracticeD3D11.h"
+#include "CPracticeD3D11.h"
 
-#include "MeshRendererObject.h"
-#include "CameraObject.h"
-#include "MeshCube.h"
-#include "MeshCubeTex.h"
-#include "Material.h"
+#include "CMeshRendererObject.h"
+#include "CCameraObject.h"
+#include "CMeshCube.h"
+#include "CMeshCubeTex.h"
+#include "CMaterial.h"
 
 int APIENTRY wWinMain(_In_     HINSTANCE hInstance,
     _In_opt_ HINSTANCE hPrevInstance,
@@ -44,35 +44,35 @@ bool CPracticeD3D11::Initialize()
     _CameraObject->SetPosition(0, 0, -5.f);
     _CameraObject->SetRotation(0, 0, 0);
 
-    Mesh* newMesh = nullptr;
-    Material* newMaterial = nullptr;
-    MeshRendererObject* newObject = nullptr;
+    CMesh* newMesh = nullptr;
+    CMaterial* newMaterial = nullptr;
+    CMeshRendererObject* newObject = nullptr;
 
     {
-        newMesh = new MeshCube();
+        newMesh = new CMeshCube();
         newMesh->Initialize();
         _ListMesh.push_back(newMesh);
 
-        newMaterial = new Material();
+        newMaterial = new CMaterial();
         newMaterial->Initialize();
         _ListMaterial.push_back(newMaterial);
 
-        newObject = new MeshRendererObject();
+        newObject = new CMeshRendererObject();
         newObject->Initialize(_D3DDevice, newMesh, newMaterial);
         _ListMeshRendererObject.push_back(newObject);
 
         newObject->SetPosition(2, 0, 0);
     }
     {
-        newMesh = new MeshCube();
+        newMesh = new CMeshCube();
         newMesh->Initialize();
         _ListMesh.push_back(newMesh);
 
-        newMaterial = new Material();
+        newMaterial = new CMaterial();
         newMaterial->Initialize();
         _ListMaterial.push_back(newMaterial);
 
-        newObject = new MeshRendererObject();
+        newObject = new CMeshRendererObject();
         newObject->Initialize(_D3DDevice, newMesh, newMaterial);
         _ListMeshRendererObject.push_back(newObject);
 
@@ -114,7 +114,7 @@ void CPracticeD3D11::UpdateScene(float DeltaTime)
 {
     _CameraObject->Update(DeltaTime);
 
-    for (MeshRendererObject* Object : _ListMeshRendererObject)
+    for (CMeshRendererObject* Object : _ListMeshRendererObject)
     {
         if (Object != nullptr) Object->Update(DeltaTime);
     }
@@ -124,7 +124,7 @@ void CPracticeD3D11::DrawScene()
 {
     _CameraObject->Draw(_D3DDeviceContext);
 
-    for (MeshRendererObject* Object : _ListMeshRendererObject)
+    for (CMeshRendererObject* Object : _ListMeshRendererObject)
     {
         if (Object != nullptr) Object->Draw(_D3DDeviceContext);
     }

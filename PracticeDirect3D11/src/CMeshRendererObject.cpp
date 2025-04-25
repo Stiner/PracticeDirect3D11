@@ -1,13 +1,13 @@
 ﻿// PracticeD3D11
 
 #include "PCH.h"
-#include "MeshRendererObject.h"
+#include "CMeshRendererObject.h"
 
-#include "Mesh.h"
-#include "Material.h"
+#include "CMesh.h"
+#include "CMaterial.h"
 #include "Utility.h"
 
-MeshRendererObject::MeshRendererObject()
+CMeshRendererObject::CMeshRendererObject()
     : _Position({ 0, 0, 0, 0 })
     , _Rotation({ 0, 0, 0, 0 })
     , _Scale({ 1, 1, 1, 0 })
@@ -15,7 +15,7 @@ MeshRendererObject::MeshRendererObject()
 {
 }
 
-void MeshRendererObject::Initialize(ID3D11Device* D3DDevice, Mesh* SourceMesh, Material* SourceMaterial)
+void CMeshRendererObject::Initialize(ID3D11Device* D3DDevice, CMesh* SourceMesh, CMaterial* SourceMaterial)
 {
     if (SourceMesh == nullptr)
         return;
@@ -30,7 +30,7 @@ void MeshRendererObject::Initialize(ID3D11Device* D3DDevice, Mesh* SourceMesh, M
     CreateVertexIndexBuffer(D3DDevice);
 }
 
-void MeshRendererObject::CreateVertexShader(ID3D11Device* D3DDevice)
+void CMeshRendererObject::CreateVertexShader(ID3D11Device* D3DDevice)
 {
     HRESULT hr = S_OK;
 
@@ -53,7 +53,7 @@ void MeshRendererObject::CreateVertexShader(ID3D11Device* D3DDevice)
     COM_RELEASE(VertexShaderBlob);
 }
 
-void MeshRendererObject::CreateInputLayout(ID3D11Device* D3DDevice, ID3DBlob* VertexShaderBlob)
+void CMeshRendererObject::CreateInputLayout(ID3D11Device* D3DDevice, ID3DBlob* VertexShaderBlob)
 {
     HRESULT hr = S_OK;
 
@@ -66,7 +66,7 @@ void MeshRendererObject::CreateInputLayout(ID3D11Device* D3DDevice, ID3DBlob* Ve
     assert(SUCCEEDED(hr));
 }
 
-void MeshRendererObject::CreatePixelShader(ID3D11Device* D3DDevice)
+void CMeshRendererObject::CreatePixelShader(ID3D11Device* D3DDevice)
 {
     HRESULT hr = S_OK;
 
@@ -88,7 +88,7 @@ void MeshRendererObject::CreatePixelShader(ID3D11Device* D3DDevice)
     COM_RELEASE(PixelShaderBlob);
 }
 
-void MeshRendererObject::CreateRasterizerState(ID3D11Device* D3DDevice)
+void CMeshRendererObject::CreateRasterizerState(ID3D11Device* D3DDevice)
 {
     HRESULT hr = S_OK;
 
@@ -108,7 +108,7 @@ void MeshRendererObject::CreateRasterizerState(ID3D11Device* D3DDevice)
     assert(SUCCEEDED(hr));
 }
 
-void MeshRendererObject::CreateConstantBuffer(ID3D11Device* D3DDevice)
+void CMeshRendererObject::CreateConstantBuffer(ID3D11Device* D3DDevice)
 {
     HRESULT hr = S_OK;
     D3D11_BUFFER_DESC descBuffer = {};
@@ -129,7 +129,7 @@ void MeshRendererObject::CreateConstantBuffer(ID3D11Device* D3DDevice)
     assert(SUCCEEDED(hr));
 }
 
-void MeshRendererObject::CreateVertexIndexBuffer(ID3D11Device* D3DDevice)
+void CMeshRendererObject::CreateVertexIndexBuffer(ID3D11Device* D3DDevice)
 {
     HRESULT hr = S_OK;
     D3D11_BUFFER_DESC descBuffer = {};
@@ -170,7 +170,7 @@ void MeshRendererObject::CreateVertexIndexBuffer(ID3D11Device* D3DDevice)
     }
 }
 
-void MeshRendererObject::Update(float DeltaTime)
+void CMeshRendererObject::Update(float DeltaTime)
 {
     static float angle = 0;
     angle += XMConvertToRadians(30.f) * DeltaTime;
@@ -183,7 +183,7 @@ void MeshRendererObject::Update(float DeltaTime)
     }
 }
 
-void MeshRendererObject::UpdateMatrix()
+void CMeshRendererObject::UpdateMatrix()
 {
     XMMATRIX matTranslate = XMMatrixTranslationFromVector(_Position);
     XMMATRIX matRotation = XMMatrixRotationQuaternion(_Rotation);
@@ -192,7 +192,7 @@ void MeshRendererObject::UpdateMatrix()
     _MatWorld = matScale * matRotation * matTranslate;
 }
 
-void MeshRendererObject::Draw(ID3D11DeviceContext* D3DDeviceContext) const
+void CMeshRendererObject::Draw(ID3D11DeviceContext* D3DDeviceContext) const
 {
     assert(D3DDeviceContext);
 
@@ -232,7 +232,7 @@ void MeshRendererObject::Draw(ID3D11DeviceContext* D3DDeviceContext) const
     D3DDeviceContext->DrawIndexed(_Mesh->GetNumIndices(), 0, 0);
 }
 
-void MeshRendererObject::Release()
+void CMeshRendererObject::Release()
 {
     COM_RELEASE(_D3DInputLayout);
     COM_RELEASE(_D3DVertexShader);
@@ -244,33 +244,33 @@ void MeshRendererObject::Release()
     COM_RELEASE(_D3DBufferMatWorld);
 }
 
-void MeshRendererObject::SetPosition(float x, float y, float z) noexcept
+void CMeshRendererObject::SetPosition(float x, float y, float z) noexcept
 {
     _Position = XMVectorSet(x, y, z, 0);
 
     _IsDirty = true;
 }
 
-void MeshRendererObject::SetRotation(float pitch, float yaw, float roll)
+void CMeshRendererObject::SetRotation(float pitch, float yaw, float roll)
 {
     _Rotation = XMQuaternionRotationRollPitchYaw(pitch, yaw, roll);
 
     _IsDirty = true;
 }
 
-void MeshRendererObject::SetScale(float x, float y, float z) noexcept
+void CMeshRendererObject::SetScale(float x, float y, float z) noexcept
 {
     _Scale = XMVectorSet(x, y, z, 0);
 
     _IsDirty = true;
 }
 
-const DirectX::XMMATRIX* MeshRendererObject::GetWorldMatrix() const noexcept
+const DirectX::XMMATRIX* CMeshRendererObject::GetWorldMatrix() const noexcept
 {
     return &_MatWorld;
 }
 
-ID3D11InputLayout* MeshRendererObject::GetInputLayout() const noexcept
+ID3D11InputLayout* CMeshRendererObject::GetInputLayout() const noexcept
 {
     return _D3DInputLayout;
 }

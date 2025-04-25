@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "GameTimer.h"
+#include "CGameTimer.h"
 
 class CD3D11App
 {

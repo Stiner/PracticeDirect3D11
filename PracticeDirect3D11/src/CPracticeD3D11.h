@@ -2,11 +2,11 @@
 
 #pragma once
 
-#include "D3DApp.h"
+#include "CD3DApp.h"
 
-class Mesh;
-class Material;
-class MeshRendererObject;
+class CMesh;
+class CMaterial;
+class CMeshRendererObject;
 class CameraObject;
 
 class CPracticeD3D11 : public CD3D11App
@@ -28,9 +28,9 @@ public:
     virtual void OnMouseMove(WPARAM btnState, int x, int y) override;
 
 protected:
-    std::vector<Mesh*> _ListMesh;
-    std::vector<Material*> _ListMaterial;
-    std::vector<MeshRendererObject*> _ListMeshRendererObject;
+    std::vector<CMesh*> _ListMesh;
+    std::vector<CMaterial*> _ListMaterial;
+    std::vector<CMeshRendererObject*> _ListMeshRendererObject;
 
     CameraObject* _CameraObject = nullptr;
 };

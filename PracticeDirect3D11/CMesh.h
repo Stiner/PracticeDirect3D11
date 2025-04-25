@@ -1,10 +1,12 @@
-﻿#pragma once
+﻿// PracticeD3D11
 
-class Mesh
+#pragma once
+
+class CMesh
 {
 public:
-    Mesh() = default;
-    virtual ~Mesh() = default;
+    CMesh() = default;
+    virtual ~CMesh() = default;
 
     virtual void Initialize() = 0;
     virtual void Release() noexcept = 0;

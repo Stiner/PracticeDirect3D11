@@ -2,16 +2,16 @@
 
 #pragma once
 
-class Mesh;
-class Material;
+class CMesh;
+class CMaterial;
 
-class MeshRendererObject
+class CMeshRendererObject
 {
 public:
-    MeshRendererObject();
-    virtual ~MeshRendererObject() = default;
+    CMeshRendererObject();
+    virtual ~CMeshRendererObject() = default;
 
-    void Initialize(ID3D11Device* D3DDevice, Mesh* SourceMesh, Material* SourceMaterial);
+    void Initialize(ID3D11Device* D3DDevice, CMesh* SourceMesh, CMaterial* SourceMaterial);
 
 protected:
     void CreateVertexShader(ID3D11Device* D3DDevice);
@@ -45,8 +45,8 @@ protected:
 
     DirectX::XMMATRIX _MatWorld;
 
-    Mesh* _Mesh = nullptr;
-    Material* _Material = nullptr;
+    CMesh* _Mesh = nullptr;
+    CMaterial* _Material = nullptr;
 
     ID3D11InputLayout*     _D3DInputLayout     = nullptr;
     ID3D11VertexShader*    _D3DVertexShader    = nullptr;

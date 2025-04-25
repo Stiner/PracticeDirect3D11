@@ -1,7 +1,7 @@
 ﻿// PracticeD3D11
 
 #include "PCH.h"
-#include "GameTimer.h"
+#include "CGameTimer.h"
 
 CGameTimer::CGameTimer()
     : _SecondsPerCount(0.0)

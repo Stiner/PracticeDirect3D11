@@ -1,8 +1,10 @@
-﻿#pragma once
+﻿// PracticeD3D11
 
-#include "Mesh.h"
+#pragma once
 
-class MeshCubeTex : public Mesh
+#include "CMesh.h"
+
+class CMeshCubeTex : public CMesh
 {
 public:
     struct Vertex
@@ -12,8 +14,8 @@ public:
     };
 
 public:
-    MeshCubeTex() = default;
-    virtual ~MeshCubeTex() = default;
+    CMeshCubeTex() = default;
+    virtual ~CMeshCubeTex() = default;
 
     void Initialize();
     void Release() noexcept;

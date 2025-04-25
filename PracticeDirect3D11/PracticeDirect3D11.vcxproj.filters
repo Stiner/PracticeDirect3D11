@@ -39,22 +39,22 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\CameraObject.cpp">
+    <ClCompile Include="src\CCameraObject.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\D3DApp.cpp">
+    <ClCompile Include="src\CD3DApp.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\GameTimer.cpp">
+    <ClCompile Include="src\CGameTimer.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\MeshCube.cpp">
+    <ClCompile Include="src\CMeshCube.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\MeshRendererObject.cpp">
+    <ClCompile Include="src\CMeshRendererObject.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\PracticeD3D11.cpp">
+    <ClCompile Include="src\CPracticeD3D11.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Utility.cpp">
@@ -63,33 +63,36 @@
     <ClCompile Include="src\PCH.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="Mesh.cpp">
+    <ClCompile Include="CMesh.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="MeshCubeTex.cpp">
+    <ClCompile Include="CMeshCubeTex.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="Material.cpp">
+    <ClCompile Include="CMaterial.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="CD3DDevice.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\CameraObject.h">
+    <ClInclude Include="src\CCameraObject.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\D3DApp.h">
+    <ClInclude Include="src\CD3DApp.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\GameTimer.h">
+    <ClInclude Include="src\CGameTimer.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\MeshCube.h">
+    <ClInclude Include="src\CMeshCube.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\MeshRendererObject.h">
+    <ClInclude Include="src\CMeshRendererObject.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\PracticeD3D11.h">
+    <ClInclude Include="src\CPracticeD3D11.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Utility.h">
@@ -104,13 +107,16 @@
     <ClInclude Include="src\PCH.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="Mesh.h">
+    <ClInclude Include="CMesh.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="MeshCubeTex.h">
+    <ClInclude Include="CMeshCubeTex.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="Material.h">
+    <ClInclude Include="CMaterial.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="CD3DDevice.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

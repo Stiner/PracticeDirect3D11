@@ -1,7 +1,7 @@
 ﻿// PracticeD3D11
 
 #include "PCH.h"
-#include "CameraObject.h"
+#include "CCameraObject.h"
 #include "Utility.h"
 
 CameraObject::CameraObject()

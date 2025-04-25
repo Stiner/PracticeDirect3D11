@@ -1,7 +1,9 @@
-﻿#include "PCH.h"
-#include "MeshCube.h"
+﻿// PracticeD3D11
 
-void MeshCube::Initialize()
+#include "PCH.h"
+#include "CMeshCube.h"
+
+void CMeshCube::Initialize()
 {
     _NumDescVertex = 2;
     _DescVertex = new D3D11_INPUT_ELEMENT_DESC[_NumDescVertex]
@@ -47,7 +49,7 @@ void MeshCube::Initialize()
     };
 }
 
-void MeshCube::Release() noexcept
+void CMeshCube::Release() noexcept
 {
     _VertexSize = 0;
 
