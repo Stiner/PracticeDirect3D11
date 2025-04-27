@@ -2,49 +2,38 @@
 
 #pragma once
 
+#include "CSceneObject.h"
+
 class CMesh;
 class CMaterial;
 
-class CMeshRendererObject
+class CMeshRendererObject : public CSceneObject
 {
 public:
     CMeshRendererObject();
     virtual ~CMeshRendererObject() = default;
 
-    void Initialize(ID3D11Device* D3DDevice, CMesh* SourceMesh, CMaterial* SourceMaterial);
+    void Initialize(CMesh* SourceMesh, CMaterial* SourceMaterial);
 
-protected:
-    void CreateVertexShader(ID3D11Device* D3DDevice);
-    void CreateInputLayout(ID3D11Device* D3DDevice, ID3DBlob* VertexShaderBlob);
-    void CreatePixelShader(ID3D11Device* D3DDevice);
-    void CreateRasterizerState(ID3D11Device* D3DDevice);
-    void CreateConstantBuffer(ID3D11Device* D3DDevice);
-    void CreateVertexIndexBuffer(ID3D11Device* D3DDevice);
-
-public:
-    void Update(float DeltaTime);
-    void UpdateMatrix();
-    void Draw(ID3D11DeviceContext* D3DDeviceContext) const;
+    virtual void Update(float DeltaTime) override;
+    void Draw() const;
 
     void Release();
 
     void SetPosition(float x, float y, float z) noexcept;
-    void SetRotation(float pitch, float yaw, float roll);
+    void SetRotation(float pitch, float yaw, float roll) noexcept;
     void SetScale(float x, float y, float z) noexcept;
 
-    const DirectX::XMMATRIX* GetWorldMatrix() const noexcept;
+protected:
+    void CreateVertexShader();
+    void CreateInputLayout(ID3DBlob* VertexShaderBlob);
+    void CreatePixelShader();
+    void CreateRasterizerState();
+    void CreateVertexIndexBuffer();
 
-    ID3D11InputLayout* GetInputLayout() const noexcept;
+    virtual void UpdateMatrix() override;
 
 protected:
-    DirectX::XMVECTOR _Position;
-    DirectX::XMVECTOR _Rotation; // Quaternion
-    DirectX::XMVECTOR _Scale;
-
-    bool _IsDirty = false;
-
-    DirectX::XMMATRIX _MatWorld;
-
     CMesh* _Mesh = nullptr;
     CMaterial* _Material = nullptr;
 
@@ -55,5 +44,4 @@ protected:
 
     ID3D11Buffer* _D3DBufferVertex   = nullptr;
     ID3D11Buffer* _D3DBufferIndex    = nullptr;
-    ID3D11Buffer* _D3DBufferMatWorld = nullptr;
 };

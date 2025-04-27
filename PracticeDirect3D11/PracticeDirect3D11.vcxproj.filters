@@ -75,6 +75,9 @@
     <ClCompile Include="CD3DDevice.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="CSceneObject.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\CCameraObject.h">
@@ -117,6 +120,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="CD3DDevice.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="CSceneObject.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

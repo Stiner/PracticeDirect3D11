@@ -2,7 +2,7 @@
 
 #pragma once
 
-class CGameTimer
+class CGameTimer final
 {
 public:
     CGameTimer();

@@ -2,21 +2,24 @@
 
 #pragma once
 
-class CameraObject
+#include "CSceneObject.h"
+
+class CameraObject : public CSceneObject
 {
 public:
     CameraObject();
-    ~CameraObject() = default;
+    virtual ~CameraObject() = default;
 
-	void Initialize(ID3D11Device* D3DDevice);
+	virtual void Initialize() override;
 
-	void Update(float DeltaTime);
-    void Draw(ID3D11DeviceContext* D3DDeviceContext);
+	virtual void Update(float DeltaTime) override;
+    void Draw();
 
     void Release();
 
     void SetPosition(float x, float y, float z) noexcept;
-    void SetRotation(float pitch, float yaw, float roll);
+    void SetRotation(float pitch, float yaw, float roll) noexcept;
+    void SetScale(float x, float y, float z) noexcept;
 
     void SetFov(float fov) noexcept;
     void SetAspectRatio(float aspectRatio) noexcept;
@@ -24,25 +27,11 @@ public:
     void SetFar(float farZ) noexcept;
 
 protected:
-    void UpdateMatrix();
+    virtual void UpdateMatrix() override;
 
 protected:
-    DirectX::XMVECTOR _Position;
-    DirectX::XMVECTOR _Rotation; // Quaternion
-
-    DirectX::XMVECTOR _Forward;
-    DirectX::XMVECTOR _Up;
-
-    DirectX::XMMATRIX _MatView;
-    DirectX::XMMATRIX _MatProj;
-    DirectX::XMMATRIX _MatViewProj;
-
     float _fov         = 0;
     float _aspectRatio = 0;
     float _nearZ       = 0;
     float _farZ        = 0;
-
-	ID3D11Buffer* _D3DBufferMatViewProj = nullptr;
-
-	bool _IsDirty = false;
 };

@@ -25,8 +25,10 @@
 #include <crtdbg.h>
 #endif
 
-#define MEM_DELETE(_x) { if(_x != nullptr) { delete _x; _x = nullptr; } }
-#define COM_RELEASE(_x) { if (static_cast<IUnknown*>(_x) != nullptr) { _x->Release(); _x = nullptr; } }
+#define MEM_DELETE(_expr_) { if(_expr_ != nullptr) { delete _expr_; _expr_ = nullptr; } }
+#define COM_RELEASE(_expr_) { if (static_cast<IUnknown*>(_expr_) != nullptr) { _expr_->Release(); _expr_ = nullptr; } }
+#define CHECK(_expr_) { HRESULT _hr_ = (_expr_); if (FAILED(_hr_)) assert(SUCCEEDED(_hr_)); }
+#define R_CHECK(_expr_) { HRESULT _hr_ = (_expr_); if (FAILED(_hr_)) { assert(SUCCEEDED(_hr_)); return _hr_; } }
 
 typedef signed char         int8;
 typedef signed short        int16;

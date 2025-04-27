@@ -4,7 +4,7 @@
 
 #include "CMesh.h"
 
-class CMeshCubeTex : public CMesh
+class CMeshCubeTex final : public CMesh
 {
 public:
     struct Vertex
@@ -17,6 +17,6 @@ public:
     CMeshCubeTex() = default;
     virtual ~CMeshCubeTex() = default;
 
-    void Initialize();
-    void Release() noexcept;
+    virtual void Initialize() final;
+    virtual void Release() noexcept final;
 };

@@ -145,6 +145,7 @@
     <ClCompile Include="CMaterial.cpp" />
     <ClCompile Include="CMesh.cpp" />
     <ClCompile Include="CMeshCubeTex.cpp" />
+    <ClCompile Include="CSceneObject.cpp" />
     <ClCompile Include="src\CCameraObject.cpp" />
     <ClCompile Include="src\CD3DApp.cpp" />
     <ClCompile Include="src\CGameTimer.cpp" />
@@ -162,6 +163,7 @@
     <ClInclude Include="CMaterial.h" />
     <ClInclude Include="CMesh.h" />
     <ClInclude Include="CMeshCubeTex.h" />
+    <ClInclude Include="CSceneObject.h" />
     <ClInclude Include="res\Resource.h" />
     <ClInclude Include="res\targetver.h" />
     <ClInclude Include="src\CCameraObject.h" />
