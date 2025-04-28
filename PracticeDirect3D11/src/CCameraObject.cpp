@@ -6,12 +6,12 @@
 #include "CD3DDevice.h"
 #include "Utility.h"
 
-CameraObject::CameraObject()
+CCameraObject::CCameraObject()
     : CSceneObject()
 {
 }
 
-void CameraObject::Initialize()
+void CCameraObject::Initialize()
 {
     SetFov(90.0f);
     SetAspectRatio(1);
@@ -24,7 +24,7 @@ void CameraObject::Initialize()
     __super::Initialize();
 }
 
-void CameraObject::Update(float DeltaTime)
+void CCameraObject::Update(float DeltaTime)
 {
     //static float yaw = 0;
     //yaw += XMConvertToRadians(30.0f) * DeltaTime;
@@ -35,64 +35,64 @@ void CameraObject::Update(float DeltaTime)
     __super::Update(DeltaTime);
 }
 
-void CameraObject::Draw()
+void CCameraObject::Draw()
 {
     CD3DDevice::Context->VSSetConstantBuffers(0, 1, &_D3DBufferMatrix);
 }
 
-void CameraObject::Release()
+void CCameraObject::Release()
 {
 	COM_RELEASE(_D3DBufferMatrix);
 }
 
-void CameraObject::SetPosition(float x, float y, float z) noexcept
+void CCameraObject::SetPosition(float x, float y, float z) noexcept
 {
     _Position = XMVectorSet(x, y, z, 0);
 }
 
-void CameraObject::SetRotation(float pitch, float yaw, float roll) noexcept
+void CCameraObject::SetRotation(float pitch, float yaw, float roll) noexcept
 {
     _Rotation = XMQuaternionRotationRollPitchYaw(pitch, yaw, roll);
 
 	_IsDirty = true;
 }
 
-void CameraObject::SetScale(float x, float y, float z) noexcept
+void CCameraObject::SetScale(float x, float y, float z) noexcept
 {
     _Scale = XMVectorSet(x, y, z, 0);
 
     _IsDirty = true;
 }
 
-void CameraObject::SetFov(float fov) noexcept
+void CCameraObject::SetFov(float fov) noexcept
 {
     _fov = XMConvertToRadians(fov); // fov * (XM_PI / 180.0f);
 
     _IsDirty = true;
 }
 
-void CameraObject::SetAspectRatio(float aspectRatio) noexcept
+void CCameraObject::SetAspectRatio(float aspectRatio) noexcept
 {
     _aspectRatio = aspectRatio;
 
     _IsDirty = true;
 }
 
-void CameraObject::SetNear(float nearZ) noexcept
+void CCameraObject::SetNear(float nearZ) noexcept
 {
     _nearZ = nearZ;
 
     _IsDirty = true;
 }
 
-void CameraObject::SetFar(float farZ) noexcept
+void CCameraObject::SetFar(float farZ) noexcept
 {
     _farZ = farZ;
 
     _IsDirty = true;
 }
 
-void CameraObject::UpdateMatrix()
+void CCameraObject::UpdateMatrix()
 {
     __super::UpdateMatrix();
 

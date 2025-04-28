@@ -105,8 +105,9 @@ void CPracticeD3D11::OnMouseMove(WPARAM btnState, int x, int y)
 
 HRESULT CPracticeD3D11::BuildScene()
 {
-    _CameraObject = new CameraObject();
+    _CameraObject = new CCameraObject();
     _CameraObject->Initialize();
+
     _CameraObject->SetAspectRatio(GetAspectRatio());
     _CameraObject->SetPosition(0, 0, -5.f);
     _CameraObject->SetRotation(0, 0, 0);

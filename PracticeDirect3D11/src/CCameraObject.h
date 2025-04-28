@@ -4,11 +4,11 @@
 
 #include "CSceneObject.h"
 
-class CameraObject : public CSceneObject
+class CCameraObject : public CSceneObject
 {
 public:
-    CameraObject();
-    virtual ~CameraObject() = default;
+    CCameraObject();
+    virtual ~CCameraObject() = default;
 
 	virtual void Initialize() override;
 
