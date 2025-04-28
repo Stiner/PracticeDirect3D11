@@ -6,8 +6,7 @@
 
 class CMesh;
 class CMaterial;
-class CMeshRendererObject;
-class CCameraObject;
+class CSceneObject;
 
 class CPracticeD3D11 : public CD3D11App
 {
@@ -33,7 +32,9 @@ protected:
 protected:
     std::vector<CMesh*> _ListMesh;
     std::vector<CMaterial*> _ListMaterial;
-    std::vector<CMeshRendererObject*> _ListMeshRendererObject;
 
-    CCameraObject* _CameraObject = nullptr;
+    std::vector<CSceneObject*> _ListSceneObject;
+    //std::vector<CMeshRendererObject*> _ListMeshRendererObject;
+
+    //CCameraObject* _CameraObject = nullptr;
 };

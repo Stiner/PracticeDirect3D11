@@ -47,13 +47,10 @@ HRESULT CPracticeD3D11::Initialize()
 void CPracticeD3D11::Release()
 {
 #define REMOVE_ALL(_expr_) { for (const auto e : _expr_) { if (e) e->Release(); } _expr_.clear(); }
-    REMOVE_ALL(_ListMeshRendererObject);
+    REMOVE_ALL(_ListSceneObject);
     REMOVE_ALL(_ListMaterial);
     REMOVE_ALL(_ListMesh);
 #undef REMOVE_ALL
-
-    _CameraObject->Release();
-    MEM_DELETE(_CameraObject);
 
     __super::Release();
 }
@@ -65,9 +62,7 @@ HRESULT CPracticeD3D11::OnResize()
 
 void CPracticeD3D11::UpdateScene(float DeltaTime)
 {
-    _CameraObject->Update(DeltaTime);
-
-    for (CMeshRendererObject* Object : _ListMeshRendererObject)
+    for (CSceneObject* Object : _ListSceneObject)
     {
         if (Object != nullptr) Object->Update(DeltaTime);
     }
@@ -75,9 +70,7 @@ void CPracticeD3D11::UpdateScene(float DeltaTime)
 
 void CPracticeD3D11::DrawScene()
 {
-    _CameraObject->Draw();
-
-    for (CMeshRendererObject* Object : _ListMeshRendererObject)
+    for (CSceneObject* Object : _ListSceneObject)
     {
         if (Object != nullptr) Object->Draw();
     }
@@ -105,44 +98,42 @@ void CPracticeD3D11::OnMouseMove(WPARAM btnState, int x, int y)
 
 HRESULT CPracticeD3D11::BuildScene()
 {
-    _CameraObject = new CCameraObject();
-    _CameraObject->Initialize();
-
-    _CameraObject->SetAspectRatio(GetAspectRatio());
-    _CameraObject->SetPosition(0, 0, -5.f);
-    _CameraObject->SetRotation(0, 0, 0);
-
-    CMesh* newMesh = nullptr;
-    CMaterial* newMaterial = nullptr;
-    CMeshRendererObject* newObject = nullptr;
-
     {
-        newMesh = new CMeshCube();
+        CCameraObject* newCamera = new CCameraObject();
+        newCamera->Initialize();
+        _ListSceneObject.push_back(newCamera);
+
+        newCamera->SetAspectRatio(GetAspectRatio());
+        newCamera->SetPosition(0, 0, -5.f);
+        newCamera->SetRotation(0, 0, 0);
+    }
+    {
+        CMesh* newMesh = new CMeshCube();
         newMesh->Initialize();
         _ListMesh.push_back(newMesh);
 
-        newMaterial = new CMaterial();
+        CMaterial* newMaterial = new CMaterial();
         newMaterial->Initialize();
         _ListMaterial.push_back(newMaterial);
 
-        newObject = new CMeshRendererObject();
+        CMeshRendererObject* newObject = new CMeshRendererObject();
         newObject->Initialize(newMesh, newMaterial);
-        _ListMeshRendererObject.push_back(newObject);
+        _ListSceneObject.push_back(newObject);
 
         newObject->SetPosition(2, 0, 0);
     }
     {
-        newMesh = new CMeshCube();
+        CMesh* newMesh = new CMeshCube();
         newMesh->Initialize();
         _ListMesh.push_back(newMesh);
 
-        newMaterial = new CMaterial();
+        CMaterial* newMaterial = new CMaterial();
         newMaterial->Initialize();
         _ListMaterial.push_back(newMaterial);
 
-        newObject = new CMeshRendererObject();
+        CMeshRendererObject* newObject = new CMeshRendererObject();
         newObject->Initialize(newMesh, newMaterial);
-        _ListMeshRendererObject.push_back(newObject);
+        _ListSceneObject.push_back(newObject);
 
         newObject->SetPosition(-2, 0, 0);
         newObject->SetScale(.5f, .5f, .5f);
