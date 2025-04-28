@@ -49,28 +49,28 @@ void CCameraObject::SetFov(float fov) noexcept
 {
     _fov = XMConvertToRadians(fov); // fov * (XM_PI / 180.0f);
 
-    _IsDirty = true;
+    _DoCalcMatrix = true;
 }
 
 void CCameraObject::SetAspectRatio(float aspectRatio) noexcept
 {
     _aspectRatio = aspectRatio;
 
-    _IsDirty = true;
+    _DoCalcMatrix = true;
 }
 
 void CCameraObject::SetNear(float nearZ) noexcept
 {
     _nearZ = nearZ;
 
-    _IsDirty = true;
+    _DoCalcMatrix = true;
 }
 
 void CCameraObject::SetFar(float farZ) noexcept
 {
     _farZ = farZ;
 
-    _IsDirty = true;
+    _DoCalcMatrix = true;
 }
 
 void CCameraObject::UpdateMatrix()

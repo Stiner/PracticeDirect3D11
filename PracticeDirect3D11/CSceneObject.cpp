@@ -21,7 +21,7 @@ void CSceneObject::Initialize()
 
 void CSceneObject::Update(float DeltaTime)
 {
-    if (_IsDirty)
+    if (_DoCalcMatrix)
     {
         UpdateMatrix();
         UpdateDeviceBuffer();
@@ -40,21 +40,21 @@ void CSceneObject::SetPosition(float x, float y, float z) noexcept
 {
     _Position = XMVectorSet(x, y, z, 0);
 
-    _IsDirty = true;
+    _DoCalcMatrix = true;
 }
 
 void CSceneObject::SetRotation(float pitch, float yaw, float roll) noexcept
 {
     _Rotation = XMQuaternionRotationRollPitchYaw(pitch, yaw, roll);
 
-    _IsDirty = true;
+    _DoCalcMatrix = true;
 }
 
 void CSceneObject::SetScale(float x, float y, float z) noexcept
 {
     _Scale = XMVectorSet(x, y, z, 0);
 
-    _IsDirty = true;
+    _DoCalcMatrix = true;
 }
 
 void CSceneObject::CreateMatrixBuffer()

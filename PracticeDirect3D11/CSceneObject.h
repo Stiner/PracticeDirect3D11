@@ -34,7 +34,7 @@ protected:
     DirectX::XMVECTOR _Up;
 
     DirectX::XMMATRIX _Matrix;
-    bool _IsDirty = false;
+    bool _DoCalcMatrix = false;
 
     ID3D11Buffer* _D3DBufferMatrix = nullptr;
 };
