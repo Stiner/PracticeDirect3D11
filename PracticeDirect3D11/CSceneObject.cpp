@@ -28,6 +28,27 @@ void CSceneObject::Update(float DeltaTime)
     }
 }
 
+void CSceneObject::SetPosition(float x, float y, float z) noexcept
+{
+    _Position = XMVectorSet(x, y, z, 0);
+
+    _IsDirty = true;
+}
+
+void CSceneObject::SetRotation(float pitch, float yaw, float roll) noexcept
+{
+    _Rotation = XMQuaternionRotationRollPitchYaw(pitch, yaw, roll);
+
+    _IsDirty = true;
+}
+
+void CSceneObject::SetScale(float x, float y, float z) noexcept
+{
+    _Scale = XMVectorSet(x, y, z, 0);
+
+    _IsDirty = true;
+}
+
 void CSceneObject::CreateMatrixBuffer()
 {
     D3D11_BUFFER_DESC descBuffer = {};

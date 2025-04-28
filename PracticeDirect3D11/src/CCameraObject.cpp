@@ -45,25 +45,6 @@ void CCameraObject::Release()
 	COM_RELEASE(_D3DBufferMatrix);
 }
 
-void CCameraObject::SetPosition(float x, float y, float z) noexcept
-{
-    _Position = XMVectorSet(x, y, z, 0);
-}
-
-void CCameraObject::SetRotation(float pitch, float yaw, float roll) noexcept
-{
-    _Rotation = XMQuaternionRotationRollPitchYaw(pitch, yaw, roll);
-
-	_IsDirty = true;
-}
-
-void CCameraObject::SetScale(float x, float y, float z) noexcept
-{
-    _Scale = XMVectorSet(x, y, z, 0);
-
-    _IsDirty = true;
-}
-
 void CCameraObject::SetFov(float fov) noexcept
 {
     _fov = XMConvertToRadians(fov); // fov * (XM_PI / 180.0f);

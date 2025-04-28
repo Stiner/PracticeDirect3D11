@@ -20,10 +20,6 @@ public:
 
     void Release();
 
-    void SetPosition(float x, float y, float z) noexcept;
-    void SetRotation(float pitch, float yaw, float roll) noexcept;
-    void SetScale(float x, float y, float z) noexcept;
-
 protected:
     void CreateVertexShader();
     void CreateInputLayout(ID3DBlob* VertexShaderBlob);

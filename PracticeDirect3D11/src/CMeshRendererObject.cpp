@@ -87,27 +87,6 @@ void CMeshRendererObject::Release()
     COM_RELEASE(_D3DBufferMatrix);
 }
 
-void CMeshRendererObject::SetPosition(float x, float y, float z) noexcept
-{
-    _Position = XMVectorSet(x, y, z, 0);
-
-    _IsDirty = true;
-}
-
-void CMeshRendererObject::SetRotation(float pitch, float yaw, float roll) noexcept
-{
-    _Rotation = XMQuaternionRotationRollPitchYaw(pitch, yaw, roll);
-
-    _IsDirty = true;
-}
-
-void CMeshRendererObject::SetScale(float x, float y, float z) noexcept
-{
-    _Scale = XMVectorSet(x, y, z, 0);
-
-    _IsDirty = true;
-}
-
 void CMeshRendererObject::CreateVertexShader()
 {
     HRESULT hr = S_OK;
