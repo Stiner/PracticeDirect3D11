@@ -10,12 +10,12 @@ public:
     CCameraObject();
     virtual ~CCameraObject() = default;
 
-	virtual void Initialize() override;
+    virtual void Initialize() override;
 
-	virtual void Update(float DeltaTime) override;
-    void Draw();
+    virtual void Update(float DeltaTime) override;
+    virtual void Draw() override;
 
-    void Release();
+    virtual void Release() override;
 
     void SetFov(float fov) noexcept;
     void SetAspectRatio(float aspectRatio) noexcept;

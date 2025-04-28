@@ -16,9 +16,10 @@ public:
     void Initialize(CMesh* SourceMesh, CMaterial* SourceMaterial);
 
     virtual void Update(float DeltaTime) override;
-    void Draw() const;
 
-    void Release();
+    virtual void Draw() override;
+
+    virtual void Release() override;
 
 protected:
     void CreateVertexShader();

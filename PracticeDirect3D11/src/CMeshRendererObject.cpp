@@ -39,7 +39,7 @@ void CMeshRendererObject::Update(float DeltaTime)
     __super::Update(DeltaTime);
 }
 
-void CMeshRendererObject::Draw() const
+void CMeshRendererObject::Draw()
 {
     assert(CD3DDevice::Context);
     assert(_D3DInputLayout);

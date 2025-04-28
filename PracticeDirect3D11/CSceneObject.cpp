@@ -28,6 +28,14 @@ void CSceneObject::Update(float DeltaTime)
     }
 }
 
+void CSceneObject::Draw()
+{
+}
+
+void CSceneObject::Release()
+{
+}
+
 void CSceneObject::SetPosition(float x, float y, float z) noexcept
 {
     _Position = XMVectorSet(x, y, z, 0);
