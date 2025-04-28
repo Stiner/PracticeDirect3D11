@@ -41,12 +41,12 @@ void CMeshRendererObject::Update(float DeltaTime)
 
 void CMeshRendererObject::Draw()
 {
-    assert(CD3DDevice::Context);
+    __super::Draw();
+
     assert(_D3DInputLayout);
     assert(_D3DBufferVertex);
     assert(_D3DBufferIndex);
     assert(_D3DVertexShader);
-    assert(_D3DBufferMatrix);
     assert(_D3DPixelShader);
     assert(_D3DRasterizerState);
 
@@ -66,8 +66,6 @@ void CMeshRendererObject::Draw()
 
     CD3DDevice::Context->VSSetShader(_D3DVertexShader, nullptr, 0);
 
-    CD3DDevice::Context->VSSetConstantBuffers(1, 1, &_D3DBufferMatrix);
-
     CD3DDevice::Context->PSSetShader(_D3DPixelShader, nullptr, 0);
 
     CD3DDevice::Context->RSSetState(_D3DRasterizerState);
@@ -84,7 +82,8 @@ void CMeshRendererObject::Release()
 
     COM_RELEASE(_D3DBufferVertex);
     COM_RELEASE(_D3DBufferIndex);
-    COM_RELEASE(_D3DBufferMatrix);
+
+    __super::Release();
 }
 
 void CMeshRendererObject::CreateVertexShader()
@@ -209,10 +208,4 @@ void CMeshRendererObject::CreateVertexIndexBuffer()
 void CMeshRendererObject::UpdateMatrix()
 {
     __super::UpdateMatrix();
-
-    XMMATRIX matTranslate = XMMatrixTranslationFromVector(_Position);
-    XMMATRIX matRotation = XMMatrixRotationQuaternion(_Rotation);
-    XMMATRIX matScale = XMMatrixScalingFromVector(_Scale);
-
-    _Matrix = matScale * matRotation * matTranslate;
 }

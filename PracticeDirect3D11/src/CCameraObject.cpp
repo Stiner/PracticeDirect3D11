@@ -26,23 +26,23 @@ void CCameraObject::Initialize()
 
 void CCameraObject::Update(float DeltaTime)
 {
-    //static float yaw = 0;
-    //yaw += XMConvertToRadians(30.0f) * DeltaTime;
-    //
-    //SetPosition(0, 0, 3);
-    //SetRotation(0, yaw, 0);
-
     __super::Update(DeltaTime);
 }
 
 void CCameraObject::Draw()
 {
+    // 여기서 계산된 행렬은 ViewProjection 이기 때문에
+    // CSceneObject::Draw()에서 쉐이더의 World 슬롯에 셋팅하는 처리는 스킵
+    //__super::Draw();
+
+    assert(_D3DBufferMatrix);
+
     CD3DDevice::Context->VSSetConstantBuffers(0, 1, &_D3DBufferMatrix);
 }
 
 void CCameraObject::Release()
 {
-	COM_RELEASE(_D3DBufferMatrix);
+    __super::Release();
 }
 
 void CCameraObject::SetScale(float x, float y, float z) noexcept
@@ -80,7 +80,9 @@ void CCameraObject::SetFar(float farZ) noexcept
 
 void CCameraObject::UpdateMatrix()
 {
-    __super::UpdateMatrix();
+    // 여기서 계산되는 행렬은 ViewProjection 이기 때문에
+    // CSceneObject::UpdateMatrix()에서 계산되는 World 는 스킵
+    //__super::UpdateMatrix();
 
     XMVECTOR lookDir = XMVector3Rotate(Const::Vector::BaseForward, _Rotation);
     _Forward = XMVector3Normalize(lookDir);

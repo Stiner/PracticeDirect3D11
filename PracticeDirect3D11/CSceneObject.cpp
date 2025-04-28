@@ -30,10 +30,15 @@ void CSceneObject::Update(float DeltaTime)
 
 void CSceneObject::Draw()
 {
+    assert(CD3DDevice::Context);
+    assert(_D3DBufferMatrix);
+
+    CD3DDevice::Context->VSSetConstantBuffers(1, 1, &_D3DBufferMatrix);
 }
 
 void CSceneObject::Release()
 {
+    COM_RELEASE(_D3DBufferMatrix);
 }
 
 void CSceneObject::SetPosition(float x, float y, float z) noexcept
@@ -83,6 +88,12 @@ void CSceneObject::UpdateMatrix()
 
     XMVECTOR up = XMVector3Rotate(Const::Vector::BaseUp, _Rotation);
     _Up = XMVector3Normalize(up);
+
+    XMMATRIX matTranslate = XMMatrixTranslationFromVector(_Position);
+    XMMATRIX matRotation = XMMatrixRotationQuaternion(_Rotation);
+    XMMATRIX matScale = XMMatrixScalingFromVector(_Scale);
+
+    _Matrix = matScale * matRotation * matTranslate;
 }
 
 void CSceneObject::UpdateDeviceBuffer()
