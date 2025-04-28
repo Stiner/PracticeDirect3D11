@@ -17,6 +17,8 @@ public:
 
     virtual void Release() override;
 
+    virtual void SetScale(float x, float y, float z) noexcept final;
+
     void SetFov(float fov) noexcept;
     void SetAspectRatio(float aspectRatio) noexcept;
     void SetNear(float nearZ) noexcept;

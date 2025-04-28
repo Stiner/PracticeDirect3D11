@@ -45,6 +45,11 @@ void CCameraObject::Release()
 	COM_RELEASE(_D3DBufferMatrix);
 }
 
+void CCameraObject::SetScale(float x, float y, float z) noexcept
+{
+    // do nothing
+}
+
 void CCameraObject::SetFov(float fov) noexcept
 {
     _fov = XMConvertToRadians(fov); // fov * (XM_PI / 180.0f);
